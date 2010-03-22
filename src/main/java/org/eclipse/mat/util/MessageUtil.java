@@ -15,10 +15,10 @@ public final class MessageUtil {
 	private Properties props = new Properties();
 	
     public static String format(String message, Object... objects) {
-    	System.out.println("MESSAGGEEE!" + message);
     	String pMsg = (String) instance.props.get(message);
+    	
     	if (pMsg != null) {
-    		return MessageFormat.format(message, objects);
+    		return MessageFormat.format(pMsg, objects);
     	}
     	return message;
     }
