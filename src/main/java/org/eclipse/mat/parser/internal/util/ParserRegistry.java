@@ -11,6 +11,7 @@
 package org.eclipse.mat.parser.internal.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -109,5 +110,9 @@ public class ParserRegistry
         }
         return answer;
     }
+
+	public static List<Parser> allParsers() {
+		return instance.parsers;
+	}
     
 }
