@@ -103,7 +103,6 @@ public class ParserRegistry
         {
             for (Pattern regex : p.patterns)
             {
-            	System.out.println("fileName: " + fileName);
                 if (regex.matcher(fileName).matches())
                 {
                     answer.add(p);
