@@ -28,9 +28,10 @@ public class ParserRegistry
     private static ParserRegistry instance = new ParserRegistry();
     
     static {
+    	addParser("hprof", "hprof", new String[] {"hprof", "bin"}, new org.eclipse.mat.hprof.HprofHeapObjectReader(), new org.eclipse.mat.hprof.HprofIndexBuilder());
     }
     
-    public class Parser
+    public static class Parser
     {
     	private IObjectReader objectReader;
     	private IIndexBuilder indexBuilder;
@@ -39,15 +40,14 @@ public class ParserRegistry
         private SnapshotFormat snapshotFormat;
         private Pattern[] patterns;
 
-        public Parser(String id, SnapshotFormat snapshotFormat, String[] extensions, IObjectReader objectReader, IIndexBuilder indexBuilder)
+        public Parser(String id, SnapshotFormat snapshotFormat, IObjectReader objectReader, IIndexBuilder indexBuilder)
         {
             this.id = id;
             this.snapshotFormat = snapshotFormat;
             
-            this.patterns = new Pattern[extensions.length];
-            for (int ii = 0; ii < extensions.length; ii++)
-                patterns[ii] = Pattern.compile("(.*\\.)((?i)" + extensions[ii] + ")(\\.[0-9]*)?");
-
+            this.patterns = new Pattern[snapshotFormat.getFileExtensions().length];
+            for (int ii = 0; ii < snapshotFormat.getFileExtensions().length; ii++)
+                patterns[ii] = Pattern.compile("(.*\\.)((?i)" + snapshotFormat.getFileExtensions()[ii] + ")(\\.[0-9]*)?");
         }
 
         public IObjectReader getObjectReader() {
@@ -78,9 +78,10 @@ public class ParserRegistry
     	
     }
 
-    public void addParser(String id, SnapshotFormat snapshotFormat, String[] extensions, IObjectReader objectReader, IIndexBuilder indexBuilder) {
-    	Parser p = new Parser(id, snapshotFormat, extensions, objectReader, indexBuilder);
-    	parsers.add(p);
+    public static void addParser(String id, String snapshotFormat, String[] extensions, IObjectReader objectReader, IIndexBuilder indexBuilder) {
+    	SnapshotFormat sf = new SnapshotFormat(snapshotFormat, extensions);
+    	Parser p = new Parser(id, sf, objectReader, indexBuilder);
+    	instance.parsers.add(p);
     }
     
     public static Parser lookupParser(String uniqueIdentifier)
