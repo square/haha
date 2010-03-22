@@ -101,11 +101,11 @@ public final class SnapshotImpl implements ISnapshot
                 throw new IOException(MessageUtil.format(Messages.SnapshotImpl_Error_UnknownVersion, version));
 
             String objectReaderUniqueIdentifier = in.readUTF();
-            Parser parser = ParserPlugin.getDefault().getParserRegistry().lookupParser(objectReaderUniqueIdentifier);
+            Parser parser = ParserRegistry.lookupParser(objectReaderUniqueIdentifier);
             if (parser == null)
                 throw new IOException(Messages.SnapshotImpl_Error_ParserNotFound + objectReaderUniqueIdentifier);
             listener.worked(1);
-            IObjectReader heapObjectReader = parser.create(IObjectReader.class, ParserRegistry.OBJECT_READER);
+            IObjectReader heapObjectReader = parser.getObjectReader();
 
             XSnapshotInfo snapshotInfo = (XSnapshotInfo) in.readObject();
             snapshotInfo.setProperty("$heapFormat", parser.getId()); //$NON-NLS-1$
@@ -1970,14 +1970,14 @@ public final class SnapshotImpl implements ISnapshot
     @SuppressWarnings("unchecked")
     public <A> A getSnapshotAddons(Class<A> addon) throws SnapshotException
     {
-        if (addon == UnreachableObjectsHistogram.class)
-        {
-            return (A) this.getSnapshotInfo().getProperty(UnreachableObjectsHistogram.class.getName());
-        }
-        else
-        {
+//        if (addon == UnreachableObjectsHistogram.class)
+//        {
+//            return (A) this.getSnapshotInfo().getProperty(UnreachableObjectsHistogram.class.getName());
+//        }
+//        else
+//        {
             return heapObjectReader.getAddon(addon);
-        }
+//        }
     }
     
     public IThreadStack getThreadStack(int objectId) throws SnapshotException

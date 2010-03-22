@@ -19,7 +19,6 @@ import org.eclipse.mat.collect.BitField;
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.parser.IObjectReader;
 import org.eclipse.mat.parser.index.IndexManager;
-import org.eclipse.mat.parser.internal.util.ParserRegistry;
 import org.eclipse.mat.parser.internal.util.ParserRegistry.Parser;
 import org.eclipse.mat.parser.model.ClassImpl;
 import org.eclipse.mat.parser.model.XGCRootInfo;
@@ -91,7 +90,7 @@ public class SnapshotImplBuilder
 
     public SnapshotImpl create(Parser parser, IProgressListener listener) throws IOException, SnapshotException
     {
-        IObjectReader heapObjectReader = parser.create(IObjectReader.class, ParserRegistry.OBJECT_READER);
+        IObjectReader heapObjectReader = parser.getObjectReader();
         return SnapshotImpl.create(snapshotInfo, parser.getUniqueIdentifier(), heapObjectReader, classCache, roots,
                         rootsPerThread, arrayObjects, indexManager, listener);
     }
