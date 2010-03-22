@@ -26,10 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 import org.eclipse.mat.parser.internal.SnapshotFactory;
 import org.eclipse.mat.snapshot.ISnapshot;
 import org.eclipse.mat.util.VoidProgressListener;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class TestSnapshots
 {
@@ -288,4 +291,9 @@ public class TestSnapshots
         }
     }
 
+    @Test
+    public void testSnapshotPatterns() {
+    	Pattern p = Pattern.compile("(.*\\.)((?i)hprof)(\\.[0-9]*)?");
+    	assertTrue("Regex matches", p.matcher("sun_jdk5_13_x32.hprof").matches());
+    }
 }

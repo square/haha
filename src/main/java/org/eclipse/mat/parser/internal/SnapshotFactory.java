@@ -176,6 +176,7 @@ public class SnapshotFactory
 			if (indexBuilder == null)
 				continue;
             
+			System.out.println("IN FOR!!");
             try
             {
                 indexBuilder.init(file, prefix);

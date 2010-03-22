@@ -47,8 +47,11 @@ public class ParserRegistry
             this.snapshotFormat = snapshotFormat;
             
             this.patterns = new Pattern[snapshotFormat.getFileExtensions().length];
-            for (int ii = 0; ii < snapshotFormat.getFileExtensions().length; ii++)
+            for (int ii = 0; ii < snapshotFormat.getFileExtensions().length; ii++) {
                 patterns[ii] = Pattern.compile("(.*\\.)((?i)" + snapshotFormat.getFileExtensions()[ii] + ")(\\.[0-9]*)?");
+            }
+            this.objectReader = objectReader;
+            this.indexBuilder = indexBuilder;
         }
 
         public IObjectReader getObjectReader() {
@@ -100,6 +103,7 @@ public class ParserRegistry
         {
             for (Pattern regex : p.patterns)
             {
+            	System.out.println("fileName: " + fileName);
                 if (regex.matcher(fileName).matches())
                 {
                     answer.add(p);
