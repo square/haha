@@ -1,4 +1,4 @@
-package org.eclipse.mat.tests;
+package org.eclipse.mat.tests.snapshot;
 
 import java.io.BufferedReader;
 import java.io.File;
