@@ -39,7 +39,7 @@
 							<Main-Class>net.ekabanov.cla.Main</Main-Class>
 						</manifestEntries>
 					</archive>
-					<finalName>cleak</finalName>
+					<finalName>mat-core</finalName>
 				</configuration>
 			</plugin>
 			<plugin>
