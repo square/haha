@@ -38,6 +38,7 @@ public class TestSnapshots
 {
     public static final String SUN_JDK5_64BIT = "sun_jdk5_64bit.hprof";
     public static final String SUN_JDK6_32BIT = "sun_jdk6_32bit.hprof";
+//    public static final String SUN_JDK6_32BIT = "heap.bin";
     public static final String SUN_JDK6_18_32BIT = "sun_jdk6_18_x32.hprof";
     public static final String SUN_JDK6_18_64BIT = "sun_jdk6_18_x64.hprof";
     public static final String SUN_JDK5_13_32BIT = "sun_jdk5_13_x32.hprof";
