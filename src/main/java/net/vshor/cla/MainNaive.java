@@ -95,7 +95,7 @@ public class MainNaive {
 		while (nextShortestPath != null) {
 			System.out.println("Shortest path: ");
 			for (int path : nextShortestPath) {
-				System.out.println("\t" + snapshot.getClassOf(path).getName());
+				System.out.println("\t" + snapshot.getObject(path).getTechnicalName());
 			}
 			nextShortestPath = pathsFromGCRoots.getNextShortestPath();
 		}

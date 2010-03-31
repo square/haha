@@ -202,6 +202,7 @@ public class Pass2Parser extends AbstractParser
     	ignorableClasses.add("java.lang.ref.Finalizer");
     	ignorableClasses.add("java.util.WeakHashMap$Entry");
     	ignorableClasses.add("java.lang.ThreadLocal$ThreadLocalMap$Entry");
+    	ignorableClasses.add("java.util.ResourceBundle$LoaderReference");    	
     }
     private void readInstanceDump(long segmentStartPos) throws IOException
     {
