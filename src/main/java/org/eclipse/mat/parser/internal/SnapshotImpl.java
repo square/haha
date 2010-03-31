@@ -1847,6 +1847,8 @@ public final class SnapshotImpl implements ISnapshot
 
         public PathsFromGCRootsTree getTree(Collection<int[]> paths)
         {
+        	Exception e = new Exception();
+        	e.printStackTrace();
             PathsFromGCRootsTreeBuilder rootBuilder = new PathsFromGCRootsTreeBuilder(objectId);
             for (int[] path : paths)
             {

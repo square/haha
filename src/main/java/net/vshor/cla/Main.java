@@ -35,7 +35,6 @@ public class Main {
 
 		System.out.println(retainedSet.length);
 		
-		SetInt classLoaders = new SetInt();
 		HashMapIntObject<SetInt> clObjects = new HashMapIntObject<SetInt>(500);
 		
 		for (int obj : retainedSet) {
@@ -47,9 +46,8 @@ public class Main {
 			}
 			cntSet.add(obj);
 		}
-		System.out.println("Classloaders found: " + classLoaders.size());
 		
-		DominatorsSummary dominators = snapshot.getDominatorsOf(retainedSet, Pattern.compile(""), listener);
+		DominatorsSummary dominators = snapshot.getDominatorsOf(retainedSet, Pattern.compile("java.lang.ref.WeakReference"), listener);
 		ClassDominatorRecord[] cldr = dominators.getClassDominatorRecords();
 		System.out.println();
 		for (ClassDominatorRecord cdr : cldr) {

@@ -12,6 +12,8 @@ package org.eclipse.mat.hprof;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -426,17 +428,22 @@ public class HprofParserHandlerImpl implements IHprofParserHandler
     {
         int index = object.objectId;
 
-        // check if some thread to local variables references have to be added
-        HashMapLongObject<List<XGCRootInfo>> localVars = threadAddressToLocals.get(object.objectAddress);
-        if (localVars != null)
-        {
-            IteratorLong e = localVars.keys();
-            while (e.hasNext())
-            {
-                object.references.add(e.next());
-            }
+        // XXX: WEAK REFERENCE HACK!
+        if (WeakReference.class.getName().equals(object.clazz.getName())) {
+        	//Skipping weak reference
         }
-
+        else {
+	        // check if some thread to local variables references have to be added
+	        HashMapLongObject<List<XGCRootInfo>> localVars = threadAddressToLocals.get(object.objectAddress);
+	        if (localVars != null)
+	        {
+	            IteratorLong e = localVars.keys();
+	            while (e.hasNext())
+	            {
+	                object.references.add(e.next());
+	            }
+	        }
+        }
         // log references
         outbound.log(identifiers, index, object.references);
 
