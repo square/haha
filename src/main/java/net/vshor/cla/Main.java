@@ -35,6 +35,12 @@ public class Main {
 			if (snapshot.isClass(obj))
 				continue;
 			int clId = snapshot.getClassOf(obj).getClassLoaderId();
+			if (snapshot.getObject(clId).getClazz().getName().startsWith("sun.")) {
+				System.out.println("Skipping: " + snapshot.getObject(clId).getClazz().getName());
+				continue;
+			} else {
+				System.out.println("Processing: " + snapshot.getObject(clId).getClazz().getName());
+			}
 			Boolean dominatedAllSoFar = clObjects.get(clId);
 			if (dominatedAllSoFar != null && !dominatedAllSoFar) 
 				continue;
@@ -55,6 +61,7 @@ public class Main {
 				clObjects.put(clId, clDominates);
 			}
 			else {
+				System.out.println(String.format("Classloader %s IS NOT dominating: %s:", snapshot.getObject(clId).getTechnicalName(), snapshot.getObject(obj).getTechnicalName()));
 				// If classloader is not dominating the object and 
 				// it has been dominating everything it loaded so far
 				// Then this classloader is no longer dominating.
@@ -65,7 +72,7 @@ public class Main {
 		}
 		
 		for (int loader : clObjects.getAllKeys()) {
-			System.out.println(String.format("Classloader %s dominates all its loaded classes: %b", snapshot.getObject(loader).getTechnicalName(), clObjects.get(loader)));
+			//System.out.println(String.format("Classloader %s dominates all its loaded classes: %b", snapshot.getObject(loader).getTechnicalName(), clObjects.get(loader)));
 		}
 		
 	}
