@@ -218,10 +218,10 @@ public class Pass2Parser extends AbstractParser
         heapObject.references.add(thisClazz.getObjectAddress());
 
         // extract outgoing references
-        boolean processReferences = true;
+        boolean isWeakReferenceClass = false;
         for (IClass clazz : hierarchy) {
         	if (ignorableClasses.contains(clazz.getName())) { 
-        		processReferences = false;
+        		isWeakReferenceClass = true;
         		break;
         	}
         }
@@ -233,7 +233,7 @@ public class Pass2Parser extends AbstractParser
                 if (type == IObject.Type.OBJECT)
                 {
                     long refId = readID();
-                    if (refId != 0 && processReferences)
+                    if (refId != 0 && ! (isWeakReferenceClass && field.getName().equals("referent")) )
                         heapObject.references.add(refId);
                 }
                 else
