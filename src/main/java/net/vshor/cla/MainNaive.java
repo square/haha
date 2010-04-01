@@ -56,14 +56,14 @@ public class MainNaive {
 //						"Classloader %s dominated its loaded class!", snapshot
 //								.getObject(clId).getTechnicalName()));
 			}
-//			else {
+			else {
 //				System.out.println(String.format(
 //						"Classloader %s IS NOT dominating: %s:", snapshot
 //						.getObject(clId).getTechnicalName(), snapshot
 //						.getObject(obj).getTechnicalName()));
-//				printPathToGCRoot(snapshot, obj);
-//				
-//			}
+//				printPathToGCRoot(snapshot, obj, false);
+				
+			}
 			if (dominatedAllSoFar == null) {
 				clObjects.put(clId, clDominates);
 			} else {
@@ -81,13 +81,13 @@ public class MainNaive {
 				System.out.println(String.format("Classloader %s dominates all its loaded classes: %b",
 						snapshot.getObject(loader).getTechnicalName(),
 						clObjects.get(loader)));
-				printPathToGCRoot(snapshot, loader);
+				printPathToGCRoot(snapshot, loader, true);
 			}
 		}
 
 	}
 
-	private static void printPathToGCRoot(ISnapshot snapshot, int obj)
+	private static void printPathToGCRoot(ISnapshot snapshot, int obj, boolean printAllPaths)
 			throws SnapshotException {
 		IPathsFromGCRootsComputer pathsFromGCRoots = snapshot.getPathsFromGCRoots(obj, null);
 		
@@ -97,6 +97,8 @@ public class MainNaive {
 			for (int path : nextShortestPath) {
 				System.out.println("\t" + snapshot.getObject(path).getTechnicalName());
 			}
+			if (!printAllPaths)
+				break;
 			nextShortestPath = pathsFromGCRoots.getNextShortestPath();
 		}
 	}
