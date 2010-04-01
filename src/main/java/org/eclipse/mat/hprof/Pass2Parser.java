@@ -200,9 +200,6 @@ public class Pass2Parser extends AbstractParser
     	ignorableClasses.add(SoftReference.class.getName());
     	ignorableClasses.add(PhantomReference.class.getName());
     	ignorableClasses.add("java.lang.ref.Finalizer");
-    	ignorableClasses.add("java.util.WeakHashMap$Entry");
-    	ignorableClasses.add("java.lang.ThreadLocal$ThreadLocalMap$Entry");
-    	ignorableClasses.add("java.util.ResourceBundle$LoaderReference");    	
     }
     private void readInstanceDump(long segmentStartPos) throws IOException
     {
@@ -221,6 +218,13 @@ public class Pass2Parser extends AbstractParser
         heapObject.references.add(thisClazz.getObjectAddress());
 
         // extract outgoing references
+        boolean processReferences = true;
+        for (IClass clazz : hierarchy) {
+        	if (ignorableClasses.contains(clazz.getName())) { 
+        		processReferences = false;
+        		break;
+        	}
+        }
         for (IClass clazz : hierarchy)
         {
             for (FieldDescriptor field : clazz.getFieldDescriptors())
@@ -229,7 +233,7 @@ public class Pass2Parser extends AbstractParser
                 if (type == IObject.Type.OBJECT)
                 {
                     long refId = readID();
-                    if (refId != 0 && !ignorableClasses.contains(thisClazz.getName()))
+                    if (refId != 0 && processReferences)
                         heapObject.references.add(refId);
                 }
                 else
