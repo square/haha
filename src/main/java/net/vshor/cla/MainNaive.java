@@ -42,28 +42,20 @@ public class MainNaive {
 			if (dominatedAllSoFar != null && !dominatedAllSoFar)
 				continue;
 
-			int dom = snapshot.getImmediateDominatorId(obj);
-			boolean clDominates = false;
-			while (dom != -1 && !clDominates) {
-				if (dom == clId) {
+			boolean clDominates = firstObjectDominatesSecond(clId, obj, snapshot);
+
+			if (!clDominates) {
+				boolean objDominates = firstObjectDominatesSecond(obj, clId, snapshot);
+				if (objDominates) {
+					System.out.println(String.format(
+							"Classloader %s IS NOT dominating: %s, but viceversa is true!", snapshot
+							.getObject(clId).getTechnicalName(), snapshot
+							.getObject(obj).getTechnicalName()));
+					printPathToGCRoot(snapshot, obj, false);
 					clDominates = true;
 				}
-				dom = snapshot.getImmediateDominatorId(dom);
 			}
-
-			if (clDominates) {
-//				System.out.println(String.format(
-//						"Classloader %s dominated its loaded class!", snapshot
-//								.getObject(clId).getTechnicalName()));
-			}
-			else {
-//				System.out.println(String.format(
-//						"Classloader %s IS NOT dominating: %s:", snapshot
-//						.getObject(clId).getTechnicalName(), snapshot
-//						.getObject(obj).getTechnicalName()));
-//				printPathToGCRoot(snapshot, obj, false);
-				
-			}
+			
 			if (dominatedAllSoFar == null) {
 				clObjects.put(clId, clDominates);
 			} else {
@@ -85,6 +77,19 @@ public class MainNaive {
 			}
 		}
 
+	}
+
+	private static boolean firstObjectDominatesSecond(int clId, int obj,
+			ISnapshot snapshot) throws SnapshotException {
+		boolean clDominates = false;
+		int dom = snapshot.getImmediateDominatorId(obj);
+		while (dom != -1 && !clDominates) {
+			if (dom == clId) {
+				clDominates = true;
+			}
+			dom = snapshot.getImmediateDominatorId(dom);
+		}
+		return clDominates;
 	}
 
 	private static void printPathToGCRoot(ISnapshot snapshot, int obj, boolean printAllPaths)
