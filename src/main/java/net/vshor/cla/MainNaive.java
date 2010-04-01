@@ -73,7 +73,7 @@ public class MainNaive {
 				System.out.println(String.format("Classloader %s dominates all its loaded classes: %b",
 						snapshot.getObject(loader).getTechnicalName(),
 						clObjects.get(loader)));
-				printPathToGCRoot(snapshot, loader, true);
+				printPathToGCRoot(snapshot, loader, false);
 			}
 		}
 
