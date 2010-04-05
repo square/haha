@@ -9,6 +9,7 @@ import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.parser.internal.SnapshotFactory;
 import org.eclipse.mat.snapshot.IPathsFromGCRootsComputer;
 import org.eclipse.mat.snapshot.ISnapshot;
+import org.eclipse.mat.snapshot.model.IClass;
 import org.eclipse.mat.snapshot.model.IObject;
 import org.eclipse.mat.snapshot.model.NamedReference;
 import org.eclipse.mat.util.ConsoleProgressListener;
@@ -45,11 +46,11 @@ public class ClassloaderLeakDetector {
 			if (!clDominates) {
 				boolean objDominates = firstObjectDominatesSecond(obj, clId, snapshot);
 				if (objDominates) {
-					System.out.println(String.format(
-							"Classloader %s IS NOT dominating: %s, but viceversa is true!", snapshot
-							.getObject(clId).getTechnicalName(), snapshot
-							.getObject(obj).getTechnicalName()));
-					printPathToGCRoot(snapshot, obj, false);
+//					System.out.println(String.format(
+//							"Classloader %s IS NOT dominating: %s, but viceversa is true!", snapshot
+//							.getObject(clId).getTechnicalName(), snapshot
+//							.getObject(obj).getTechnicalName()));
+//					printPathToGCRoot(snapshot, obj, false);
 					clDominates = true;
 				}
 			}
@@ -75,10 +76,10 @@ public class ClassloaderLeakDetector {
 		for (int loader : clDominationFlags.getAllKeys()) {
 			if (clDominationFlags.get(loader)) {
 				IObject loaderObj = snapshot.getObject(loader);
-				out.println(String.format("<leak>\n<classloader>%s</classloader>\n<id>%s</id>",
+				out.println(String.format("<leak>%n<classloader>%s</classloader>%n<id>0x%s</id>",
 						loaderObj.getClazz().getName(),
 						Long.toString(loaderObj.getObjectAddress(), 16)));
-				printPathToGCRoot(snapshot, loader, false);
+				printPathToGCRoot(snapshot, loader, true);
 				out.println("</leak>");
 			}
 		}
@@ -116,7 +117,12 @@ public class ClassloaderLeakDetector {
 		IObject object = snapshot.getObject(path[index]);
 		String identation = multiplyStr("\t", path.length-index);
 		out.println(identation + "<object>");
-		out.println(String.format("%s<class>%s</class>",identation,object.getClazz().getName()));
+		
+		String clazzName = object.getClazz().getName();
+		if (snapshot.isClass(object.getObjectId())) {
+			clazzName = "[Class] " + ((IClass)object).getName();
+		}
+		out.println(String.format("%s<class>%s</class>",identation,clazzName));
 		out.println(String.format("%s<id>0x%s</id>", identation.toString(), Long.toString(object.getObjectAddress(), 16)));
 		if (index > 0) {
 			out.println(identation + "<field>");
@@ -130,7 +136,7 @@ public class ClassloaderLeakDetector {
 			printObjectFromPath(path, index-1);
 			out.println(identation + "</field>");
 		}
-		out.println(identation + "</object>\n");
+		out.println(identation + "</object>");
 	}
 	
 	private String multiplyStr(String str, int howMuch) {
