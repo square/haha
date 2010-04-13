@@ -13,6 +13,7 @@ package org.eclipse.mat.snapshot.model;
 import java.io.Serializable;
 
 import org.eclipse.mat.internal.Messages;
+import org.eclipse.mat.util.MessageUtil;
 
 /**
  * Describes a garbage collection root.
@@ -78,18 +79,18 @@ abstract public class GCRootInfo implements Serializable
         int UNREACHABLE = 2048;
     }
 
-    private final static String[] TYPE_STRING = new String[] { Messages.GCRootInfo_Unkown, //
-                    Messages.GCRootInfo_SystemClass, //
-                    Messages.GCRootInfo_JNILocal, //
-                    Messages.GCRootInfo_JNIGlobal, //
-                    Messages.GCRootInfo_ThreadBlock, //
-                    Messages.GCRootInfo_BusyMonitor, //
-                    Messages.GCRootInfo_JavaLocal, //
-                    Messages.GCRootInfo_NativeStack, //
-                    Messages.GCRootInfo_Thread, //
-                    Messages.GCRootInfo_Finalizable, //
-                    Messages.GCRootInfo_Unfinalized,
-                    Messages.GCRootInfo_Unreachable };
+    private final static String[] TYPE_STRING = new String[] { MessageUtil.format(Messages.GCRootInfo_Unkown), //
+    	MessageUtil.format(Messages.GCRootInfo_SystemClass), //
+    	MessageUtil.format(Messages.GCRootInfo_JNILocal), //
+    	MessageUtil.format(Messages.GCRootInfo_JNIGlobal), //
+    	MessageUtil.format(Messages.GCRootInfo_ThreadBlock), //
+    	MessageUtil.format(Messages.GCRootInfo_BusyMonitor), //
+    	MessageUtil.format(Messages.GCRootInfo_JavaLocal), //
+    	MessageUtil.format(Messages.GCRootInfo_NativeStack), //
+    	MessageUtil.format(Messages.GCRootInfo_Thread), //
+    	MessageUtil.format(Messages.GCRootInfo_Finalizable), //
+    	MessageUtil.format(Messages.GCRootInfo_Unfinalized),
+    	MessageUtil.format(Messages.GCRootInfo_Unreachable) };
 
     protected int objectId;
     private long objectAddress;

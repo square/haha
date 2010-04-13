@@ -2,13 +2,18 @@ package net.vshor.cla;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.eclipse.mat.SnapshotException;
+import org.eclipse.mat.collect.ArrayInt;
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.parser.internal.SnapshotFactory;
 import org.eclipse.mat.snapshot.IPathsFromGCRootsComputer;
 import org.eclipse.mat.snapshot.ISnapshot;
+import org.eclipse.mat.snapshot.PathsFromGCRootsTree;
+import org.eclipse.mat.snapshot.model.GCRootInfo;
 import org.eclipse.mat.snapshot.model.IClass;
 import org.eclipse.mat.snapshot.model.IObject;
 import org.eclipse.mat.snapshot.model.NamedReference;
@@ -69,9 +74,12 @@ public class ClassloaderLeakDetector {
 
 	}
 	
+	private int xmlObjectCounter = 1;
+	
 	public void outputResultsAsXml(PrintStream where) throws SnapshotException {
 		out = where;
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		out.println("<?xml-stylesheet type=\"text/xsl\" href=\"leaks.xsl\"?>");
 		out.println("<leaks>");
 		for (int loader : clDominationFlags.getAllKeys()) {
 			if (clDominationFlags.get(loader)) {
@@ -100,45 +108,111 @@ public class ClassloaderLeakDetector {
 
 	private void printPathToGCRoot(ISnapshot snapshot, int obj, boolean printAllPaths)
 			throws SnapshotException {
+		
+		int dom = snapshot.getImmediateDominatorId(obj);
+		ArrayInt path = new ArrayInt();
+		path.add(obj);
+		while (dom != -1) {
+			path.add(dom);
+			dom = snapshot.getImmediateDominatorId(dom);
+		}
+		out.println("<dominator-path>");
+		printObjectFromPath(path.toArray());
+		out.println("</dominator-path>");
+		
 		IPathsFromGCRootsComputer pathsFromGCRoots = snapshot.getPathsFromGCRoots(obj, null);
+		List<int[]> paths = new ArrayList<int[]>();
+		
 		
 		int[] nextShortestPath = pathsFromGCRoots.getNextShortestPath();
-		while (nextShortestPath != null) {
-			out.println("<path>");
-			printObjectFromPath(nextShortestPath, nextShortestPath.length-1);
-			out.println("</path>");
+		int pathCount = 0;
+		int objectCount = 0;
+		while (nextShortestPath != null ) {
+			pathCount++;
+			objectCount += nextShortestPath.length;
+			
+			if (pathCount > 500) break;
+			
+//			out.println("<path>");
+//			printObjectFromPath(nextShortestPath);
+//			out.println("</path>");
 			if (!printAllPaths)
 				break;
+			paths.add(nextShortestPath);
 			nextShortestPath = pathsFromGCRoots.getNextShortestPath();
 		}
+//		System.out.println(pathCount + " Paths found for Leak");
+//		System.out.println(objectCount + " objects in paths");
+		
+		PathsFromGCRootsTree tree = pathsFromGCRoots.getTree(paths);
+		out.println("<tree>");
+		System.out.println(outputTree(tree, null, "  ") + " objects in path tree");
+		out.println("</tree>");
 	}
 	
-	private void printObjectFromPath(int[] path, int index) throws SnapshotException {
-		IObject object = snapshot.getObject(path[index]);
-		String identation = multiplyStr("\t", path.length-index);
-		out.println(identation + "<object>");
+	private int outputTree(PathsFromGCRootsTree tree, IObject objReferencedByRoot, String identation) throws SnapshotException {
+		out.println(String.format("%s<object id=\"%d\">", identation, xmlObjectCounter++));
+		IObject object = snapshot.getObject(tree.getOwnId());
+
+		outputGeneralObjectInfo(object, identation);
+		if (objReferencedByRoot != null) {
+			out.println(String.format("%s    <outbound-ref><![CDATA[%s]]></outbound-ref>", identation, getReferencingFieldName(object, objReferencedByRoot)));
+		}
 		
+		int result = tree.getObjectIds().length;
+		out.println(identation + "<incoming-fields>");
+		for (int subtree : tree.getObjectIds()) {
+			out.println(identation + "  <incoming-field>");
+			result += outputTree(tree.getBranch(subtree), object, "    "+identation);
+			out.println(identation + "  </incoming-field>");
+		}
+		out.println(identation + "</incoming-fields>");
+		out.println(identation + "</object>");
+		return result;
+	}
+
+	private void printObjectFromPath(int[] path) throws SnapshotException {
+		StringBuilder closingTags = new StringBuilder();
+		for (int index = path.length-1; index >= 0; index--) {
+			IObject object = snapshot.getObject(path[index]);
+			String identation = multiplyStr("  ", path.length-index);
+			out.println(String.format("%s<object id=\"%d\">", identation, xmlObjectCounter++));
+			
+			outputGeneralObjectInfo(object, identation);
+			
+			closingTags.insert(0, String.format("%s</object>%n", identation));
+			if (index > 0) {
+				out.println(identation + "<field>");
+				IObject referencingObject = snapshot.getObject(path[index-1]);
+				out.println(String.format("%s  <name><![CDATA[%s]]></name>", identation, getReferencingFieldName(object, referencingObject)));
+				closingTags.insert(0, String.format("%s</field>%n", identation));
+			}
+		}
+		out.print(closingTags);
+	}
+	
+	private void outputGeneralObjectInfo(IObject object, String identation) throws SnapshotException {
 		String clazzName = object.getClazz().getName();
+		String gcRootInfo = "";
+		if (snapshot.isGCRoot(object.getObjectId())) {
+			gcRootInfo = GCRootInfo.getTypeSetAsString(snapshot.getGCRootInfo(object.getObjectId())) + " ";
+		}
 		if (snapshot.isClass(object.getObjectId())) {
 			clazzName = "[Class] " + ((IClass)object).getName();
 		}
-		out.println(String.format("%s<class>%s</class>",identation,clazzName));
-		out.println(String.format("%s<id>0x%s</id>", identation.toString(), Long.toString(object.getObjectAddress(), 16)));
-		if (index > 0) {
-			out.println(identation + "<field>");
-			IObject nextObj = snapshot.getObject(path[index-1]);
-			for (NamedReference ref : object.getOutboundReferences()) {
-				if (ref.getObjectId() == nextObj.getObjectId()) {
-					out.println(String.format("%s\t<name>%s</name>", identation, ref.getName()));
-					break;
-				}
-			}
-			printObjectFromPath(path, index-1);
-			out.println(identation + "</field>");
-		}
-		out.println(identation + "</object>");
+		String objAddr = Long.toString(object.getObjectAddress(), 16);
+		out.println(String.format("%s<class><![CDATA[%s @ 0x%s]]></class>", identation, gcRootInfo + clazzName, objAddr));
+		out.println(String.format("%s<id>0x%s</id>", identation.toString(), objAddr));
 	}
-	
+	private String getReferencingFieldName(IObject object, IObject referencingObject) throws SnapshotException {
+		for (NamedReference ref : object.getOutboundReferences()) {
+			if (ref.getObjectId() == referencingObject.getObjectId()) {
+				return ref.getName();
+			}
+		}
+		return null;
+	}
+
 	private String multiplyStr(String str, int howMuch) {
 		StringBuilder sb = new StringBuilder(str);
 		while (--howMuch > 0) {
