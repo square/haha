@@ -14,7 +14,12 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.ref.PhantomReference;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.hprof.IHprofParserHandler.HeapObject;
@@ -189,6 +194,13 @@ public class Pass2Parser extends AbstractParser
         in.skipBytes((idSize + 1) * numInstanceFields);
     }
 
+    static Set<String> ignorableClasses = new HashSet<String>();
+    static {
+    	ignorableClasses.add(WeakReference.class.getName());
+    	ignorableClasses.add(SoftReference.class.getName());
+    	ignorableClasses.add(PhantomReference.class.getName());
+    	ignorableClasses.add("java.lang.ref.Finalizer");
+    }
     private void readInstanceDump(long segmentStartPos) throws IOException
     {
         long id = readID();
@@ -206,6 +218,13 @@ public class Pass2Parser extends AbstractParser
         heapObject.references.add(thisClazz.getObjectAddress());
 
         // extract outgoing references
+        boolean isWeakReferenceClass = false;
+        for (IClass clazz : hierarchy) {
+        	if (ignorableClasses.contains(clazz.getName())) { 
+        		isWeakReferenceClass = true;
+        		break;
+        	}
+        }
         for (IClass clazz : hierarchy)
         {
             for (FieldDescriptor field : clazz.getFieldDescriptors())
@@ -214,7 +233,7 @@ public class Pass2Parser extends AbstractParser
                 if (type == IObject.Type.OBJECT)
                 {
                     long refId = readID();
-                    if (refId != 0)
+                    if (refId != 0 && ! (isWeakReferenceClass && field.getName().equals("referent")) )
                         heapObject.references.add(refId);
                 }
                 else

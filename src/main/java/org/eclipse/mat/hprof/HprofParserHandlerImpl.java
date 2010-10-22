@@ -12,6 +12,8 @@ package org.eclipse.mat.hprof;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -436,7 +438,6 @@ public class HprofParserHandlerImpl implements IHprofParserHandler
                 object.references.add(e.next());
             }
         }
-
         // log references
         outbound.log(identifiers, index, object.references);
 

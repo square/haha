@@ -370,7 +370,7 @@ public class ClassImpl extends AbstractObjectImpl implements IClass, Comparable<
         if (className.equals(this.name))
             return true;
 
-        return hasSuperClass() ? ((ClassImpl) source.getObject(this.superClassId)).doesExtend(className) : false;
+        return (hasSuperClass() && source != null) ? ((ClassImpl) source.getObject(this.superClassId)).doesExtend(className) : false;
     }
 
     @Override

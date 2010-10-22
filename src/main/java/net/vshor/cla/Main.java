@@ -2,10 +2,16 @@ package net.vshor.cla;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import org.eclipse.mat.collect.HashMapIntObject;
+import org.eclipse.mat.collect.IteratorInt;
+import org.eclipse.mat.collect.SetInt;
 import org.eclipse.mat.parser.internal.SnapshotFactory;
+import org.eclipse.mat.snapshot.DominatorsSummary;
 import org.eclipse.mat.snapshot.ISnapshot;
+import org.eclipse.mat.snapshot.DominatorsSummary.ClassDominatorRecord;
 import org.eclipse.mat.util.ConsoleProgressListener;
 import org.eclipse.mat.util.IProgressListener;
 
@@ -29,52 +35,52 @@ public class Main {
 
 		System.out.println(retainedSet.length);
 		
-		HashMapIntObject<Boolean> clObjects = new HashMapIntObject<Boolean>(500);
+		HashMapIntObject<SetInt> clObjects = new HashMapIntObject<SetInt>(500);
 		
 		for (int obj : retainedSet) {
-			if (snapshot.isClass(obj))
-				continue;
 			int clId = snapshot.getClassOf(obj).getClassLoaderId();
-			if (snapshot.getObject(clId).getClazz().getName().startsWith("sun.")) {
-				System.out.println("Skipping: " + snapshot.getObject(clId).getClazz().getName());
-				continue;
-			} else {
-				System.out.println("Processing: " + snapshot.getObject(clId).getClazz().getName());
+			SetInt cntSet = clObjects.get(clId);
+			if (cntSet == null) {
+				cntSet = new SetInt();
+				clObjects.put(clId, cntSet);
 			}
-			Boolean dominatedAllSoFar = clObjects.get(clId);
-			if (dominatedAllSoFar != null && !dominatedAllSoFar) 
-				continue;
-			
-			int dom = snapshot.getImmediateDominatorId(obj);
-			boolean clDominates = false;
-			while (dom != -1 && !clDominates) {
-				if (dom == clId) {
-					clDominates = true;
-				}
-				dom = snapshot.getImmediateDominatorId(dom);
-			}  
-			
-			if (clDominates) {
-				System.out.println(String.format("Classloader %s dominated its loaded class!", snapshot.getObject(clId).getTechnicalName()));
-			}
-			if (dominatedAllSoFar == null) {
-				clObjects.put(clId, clDominates);
-			}
-			else {
-				System.out.println(String.format("Classloader %s IS NOT dominating: %s:", snapshot.getObject(clId).getTechnicalName(), snapshot.getObject(obj).getTechnicalName()));
-				// If classloader is not dominating the object and 
-				// it has been dominating everything it loaded so far
-				// Then this classloader is no longer dominating.
-				if (!clDominates && dominatedAllSoFar) {
-					clObjects.put(clId, Boolean.FALSE);
-				}
-			}
+			cntSet.add(obj);
 		}
 		
-		for (int loader : clObjects.getAllKeys()) {
-			//System.out.println(String.format("Classloader %s dominates all its loaded classes: %b", snapshot.getObject(loader).getTechnicalName(), clObjects.get(loader)));
-		}
-		
+		DominatorsSummary dominators = snapshot.getDominatorsOf(retainedSet, Pattern.compile("java.lang.ref.WeakReference"), listener);
+		ClassDominatorRecord[] cldr = dominators.getClassDominatorRecords();
+		System.out.println();
+		for (ClassDominatorRecord cdr : cldr) {
+			for (int dominator : cdr.getDominators()) {
+				if (snapshot.isClassLoader(dominator) && clObjects.containsKey(dominator)) {
+					SetInt clObj = clObjects.get(dominator);
+					String clName = snapshot.getObject(dominator).getTechnicalName();
+					System.out.println(String.format("Classloader %s found in dominators. It loaded %d classes and dominates %d objects", clName,  clObj.size(), cdr.getDominated().length));
+					boolean leaks = true;
+					for (IteratorInt it = clObj.iterator(); it.hasNext(); ) {
+						int loaded = it.next();
+						boolean loadedAndDominated = false;
+						for (int dominee : cdr.getDominated()) {
+//							System.out.print(".");
+							if (dominee == loaded) {
+								loadedAndDominated = true;
+								break;
+							}
+						}
+						if (!loadedAndDominated) {
+//							System.out.println("Object " + loaded + " is loaded but not dominated.");
+							leaks = false;
+						}
+						else {
+							System.out.println("Object " + loaded + " is loaded and dominated.");
+						}
+					}
+					if (leaks) {
+						System.out.println(clName + " IS LEAKING");
+					}
+				}
+			}
+		} 
 	}
 
 }

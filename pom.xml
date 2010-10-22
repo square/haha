@@ -36,7 +36,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Main-Class>net.ekabanov.cla.Main</Main-Class>
+							<Main-Class>net.vshor.cla.MainNaive</Main-Class>
 						</manifestEntries>
 					</archive>
 					<finalName>mat-core</finalName>
