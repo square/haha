@@ -60,18 +60,42 @@ public class Reducer {
 
       int[] inbound = snapshot.getInboundRefererIds(obj);
       for (int inObj : inbound) {
-        if (snapshot.getClassOf(inObj).getClassLoaderId() != clId)
+        boolean counts = true;
+        
+        do {
+          if (snapshot.getClassOf(inObj).getClassLoaderId() == clId
+              || inObj == clId) {
+            counts = false;
+            break;
+          }
+          
+          inObj = snapshot.getImmediateDominatorId(inObj);
+        } while (inObj != -1);
+        
+        if (counts)
           cli.incoming++;
       }
     }
 
     for (IteratorInt i = classloaders.keys(); i.hasNext();) {
       int clId = i.next();
-      int[] inbound = snapshot.getInboundRefererIds(clId);
-
       ClassLoaderInfo cli = classloaders.get(clId);
+      
+      int[] inbound = snapshot.getInboundRefererIds(clId);
       for (int inObj : inbound) {
-        if (snapshot.getClassOf(inObj).getClassLoaderId() != clId)
+        boolean counts = true;
+        
+        do {
+          if (snapshot.getClassOf(inObj).getClassLoaderId() == clId
+              || inObj == clId) {
+            counts = false;
+            break;
+          }
+          
+          inObj = snapshot.getImmediateDominatorId(inObj);
+        } while (inObj != -1);
+        
+        if (counts)
           cli.incoming++;
       }
       
