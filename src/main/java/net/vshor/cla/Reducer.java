@@ -6,12 +6,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.collect.IteratorInt;
 import org.eclipse.mat.collect.SetInt;
 import org.eclipse.mat.parser.internal.SnapshotFactory;
+import org.eclipse.mat.snapshot.ExcludedReferencesDescriptor;
 import org.eclipse.mat.snapshot.ISnapshot;
+import org.eclipse.mat.snapshot.model.IClass;
 import org.eclipse.mat.util.ConsoleProgressListener;
 import org.eclipse.mat.util.IProgressListener;
 
@@ -48,7 +51,22 @@ public class Reducer {
     SnapshotFactory sf = new SnapshotFactory();
     ISnapshot snapshot = sf.openSnapshot(new File(args[0]),
         new HashMap<String, String>(), listener);
-    int[] retainedSetArr = snapshot.getRetainedSet(snapshot.getGCRoots(),
+    
+    List<ExcludedReferencesDescriptor> erds = new ArrayList<ExcludedReferencesDescriptor>();
+    
+    for (IClass klass : snapshot.getClassesByName("java.lang.ref.WeakReference", true)) {
+      erds.add(new ExcludedReferencesDescriptor(klass.getObjectIds(), (Set<String>) null));
+    }
+    for (IClass klass : snapshot.getClassesByName("java.lang.ref.SoftReference", true)) {
+      erds.add(new ExcludedReferencesDescriptor(klass.getObjectIds(), (Set<String>) null));
+    }
+    for (IClass klass : snapshot.getClassesByName("java.lang.ref.PhantomReference", true)) {
+      erds.add(new ExcludedReferencesDescriptor(klass.getObjectIds(), (Set<String>) null));
+    }
+
+    int[] retainedSetArr = snapshot.getRetainedSet(
+        snapshot.getGCRoots(), 
+        erds.toArray(new ExcludedReferencesDescriptor[erds.size()]),
         listener);
     
     SetInt retainedSet = new SetInt();
