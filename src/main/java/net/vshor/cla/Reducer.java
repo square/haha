@@ -12,7 +12,6 @@ import java.util.Set;
 import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.collect.IteratorInt;
-import org.eclipse.mat.collect.SetInt;
 import org.eclipse.mat.parser.internal.SnapshotFactory;
 import org.eclipse.mat.snapshot.IPathsFromGCRootsComputer;
 import org.eclipse.mat.snapshot.ISnapshot;
@@ -24,8 +23,7 @@ public class Reducer {
   private static class ClassLoaderInfo {
     String name;
     int size = 0;
-    int incomingIndirect = 0;
-    int incomingDirect = 0;
+    int incoming = 0;
 
     public ClassLoaderInfo(String name) {        
       this.name = name;
@@ -33,7 +31,7 @@ public class Reducer {
 
     @Override
     public String toString() {     
-      return name + ", size = " + size + ", incoming direct = " + incomingDirect + ", incoming indirect = " + incomingIndirect;
+      return name + ", size = " + size + ", incoming direct = " + incoming;
     }
   }
 
@@ -56,8 +54,6 @@ public class Reducer {
    * @param args
    */
   public static void main(String[] args) throws Exception {
-    System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
     if (args.length < 1) {
       System.out.println("No arguments supplied");
     }
@@ -75,33 +71,12 @@ public class Reducer {
     for (int obj : retainedSetArr) {
       int clId = snapshot.getClassOf(obj).getClassLoaderId();
 
-//      if(!snapshot.getObject(clId).getTechnicalName().endsWith("0x1065ef1e0"))
-//        continue;
-
       ClassLoaderInfo cli = classloaders.get(clId);
       if (cli == null) {
         cli = new ClassLoaderInfo(snapshot.getObject(clId).getTechnicalName());
         classloaders.put(clId, cli);
       }
       cli.size++;
-
-      Map<IClass, Set<String>> excludeMap = getWeakExcludeMap(snapshot);
-      excludeMap.put(snapshot.getClassOf(clId), null);
-      IPathsFromGCRootsComputer paths = snapshot.getPathsFromGCRoots(obj, excludeMap);        
-
-      int[] path;
-      while ((path = paths.getNextShortestPath()) != null) {
-        cli.incomingIndirect++;
-
-        if (snapshot.getObject(clId).getTechnicalName().endsWith("0x1065ef1e0")) {
-          try {
-            System.out.println(snapshot.getObject(path[1]).getTechnicalName());
-          } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
-      }
     }
 
     List<ClassLoaderInfo> cliList = new ArrayList<Reducer.ClassLoaderInfo>();
@@ -110,26 +85,10 @@ public class Reducer {
       int clId = i.next();
       ClassLoaderInfo cli = classloaders.get(clId);
 
-//      if(!snapshot.getObject(clId).getTechnicalName().endsWith("0x1065ef1e0"))
-//        continue;
+      IPathsFromGCRootsComputer paths = snapshot.getPathsFromGCRoots(clId, getWeakExcludeMap(snapshot));        
 
-      Map<IClass, Set<String>> excludeMap = getWeakExcludeMap(snapshot);
-      excludeMap.put(snapshot.getClassOf(clId), null);
-      IPathsFromGCRootsComputer paths = snapshot.getPathsFromGCRoots(clId, excludeMap);        
-
-      int[] path;
-      while ((path = paths.getNextShortestPath()) != null) {
-        cli.incomingDirect++;
-
-        if (snapshot.getObject(clId).getTechnicalName().endsWith("0x1065ef1e0")) {
-          try {
-            System.out.println(snapshot.getObject(path[1]).getTechnicalName());
-          } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
-      }
+      while (paths.getNextShortestPath() != null)
+        cli.incoming++;
 
       cliList.add(cli);
     }    
