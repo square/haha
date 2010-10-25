@@ -1,6 +1,7 @@
 package net.vshor.cla;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.HashMap;
 
 import org.eclipse.mat.collect.HashMapIntObject;
@@ -22,7 +23,7 @@ public class Reducer {
 
     @Override
     public String toString() {     
-      return name + ", size = " + size + ", incoming = " + incoming;
+      return name + "," + size + "," + incoming;
     }
   }
 
@@ -31,8 +32,6 @@ public class Reducer {
    * @param args
    */
   public static void main(String[] args) throws Exception {
-    System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    
     if (args.length < 1) {
       System.out.println("No arguments supplied");
     }
@@ -77,6 +76,12 @@ public class Reducer {
       }
     }
 
+    PrintStream out = System.out;
+    if (args.length > 1) {
+    	out = new PrintStream(new File(args[1]));
+    }
+
+    out.println("Name,Size,Incoming refs");
     for (IteratorInt i = classloaders.keys(); i.hasNext();) {
       int clId = i.next();
       ClassLoaderInfo cli = classloaders.get(clId);
@@ -99,8 +104,10 @@ public class Reducer {
           cli.incoming++;
       }
       
-      System.out.println(cli.toString());
+      out.println(cli.toString());
     }
+    
+    out.close();
   }
 
 }
