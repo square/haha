@@ -1,6 +1,7 @@
 package net.vshor.cla;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -122,7 +123,7 @@ public class Reducer {
 
     out.println("Name,Size,Incoming refs");
     for (ClassLoaderInfo cli : cliList) {
-      System.out.println(cli);
+      out.println(cli);
     }
 	out.close();
   }
