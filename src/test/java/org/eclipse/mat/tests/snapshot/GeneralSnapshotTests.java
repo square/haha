@@ -19,52 +19,36 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
-public class GeneralSnapshotTests
-{
+public class GeneralSnapshotTests {
 
     @Parameters
-    public static Collection<Object[]> data()
-    {
-        return Arrays.asList(new Object[][] {
-            {TestSnapshots.SUN_JDK6_32BIT},
-            {TestSnapshots.SUN_JDK5_64BIT},
-            {TestSnapshots.IBM_JDK6_32BIT_HEAP},
-            {TestSnapshots.IBM_JDK6_32BIT_JAVA},
-            {TestSnapshots.IBM_JDK6_32BIT_HEAP_AND_JAVA},
-            {TestSnapshots.IBM_JDK6_32BIT_SYSTEM},
-        });
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{{TestSnapshots.ANDROID}});
     }
 
-    public GeneralSnapshotTests(String snapshotname)
-    {
+    public GeneralSnapshotTests(String snapshotname) {
         snapshot = TestSnapshots.getSnapshot(snapshotname, false);
     }
-
     final ISnapshot snapshot;
 
     @Test
-    public void Stacks1() throws SnapshotException
-    {
+    public void Stacks1() throws SnapshotException {
         int frames = 0;
         int foundTop = 0;
         int foundNotTop = 0;
-        for (IClass thrdcls : snapshot.getClassesByName("java.lang.Thread", true))
-        {
-            for (int o : thrdcls.getObjectIds())
-            {
+        for (IClass thrdcls : snapshot.getClassesByName("java.lang.Thread", true)) {
+            for (int o : thrdcls.getObjectIds()) {
                 IThreadStack stk = snapshot.getThreadStack(o);
-                if (stk != null)
-                {
+                if (stk != null) {
                     int i = 0;
-                    for (IStackFrame frm : stk.getStackFrames())
-                    {
+                    for (IStackFrame frm : stk.getStackFrames()) {
                         int os[] = frm.getLocalObjectsIds();
-                        if (os != null)
-                        {
-                            if (i == 0)
+                        if (os != null) {
+                            if (i == 0) {
                                 foundTop += os.length;
-                            else
+                            } else {
                                 foundNotTop += os.length;
+                            }
                         }
                         ++i;
                         ++frames;
@@ -74,26 +58,22 @@ public class GeneralSnapshotTests
         }
         // If there were some frames, and some frames had some objects
         // then a topmost frame should have some objects
-        if (frames > 0 && foundNotTop > 0)
-        {
+        if (frames > 0 && foundNotTop > 0) {
             assertTrue("Expected some objects on top of stack", foundTop > 0);
         }
     }
 
     @Test
-    public void TotalClasses() throws SnapshotException
-    {
+    public void TotalClasses() throws SnapshotException {
         int nc = snapshot.getClasses().size();
         int n = snapshot.getSnapshotInfo().getNumberOfClasses();
         assertEquals("Total classes", n, nc);
     }
 
     @Test
-    public void TotalObjects() throws SnapshotException
-    {
+    public void TotalObjects() throws SnapshotException {
         int no = 0;
-        for (IClass cls : snapshot.getClasses())
-        {
+        for (IClass cls : snapshot.getClasses()) {
             no += cls.getNumberOfObjects();
         }
         int n = snapshot.getSnapshotInfo().getNumberOfObjects();
@@ -101,11 +81,9 @@ public class GeneralSnapshotTests
     }
 
     @Test
-    public void TotalHeapSize() throws SnapshotException
-    {
+    public void TotalHeapSize() throws SnapshotException {
         long total = 0;
-        for (IClass cls : snapshot.getClasses())
-        {
+        for (IClass cls : snapshot.getClasses()) {
             total += snapshot.getHeapSize(cls.getObjectIds());
         }
         long n = snapshot.getSnapshotInfo().getUsedHeapSize();
@@ -113,19 +91,15 @@ public class GeneralSnapshotTests
     }
 
     @Test
-    public void ObjectSizes() throws SnapshotException
-    {
+    public void ObjectSizes() throws SnapshotException {
         long total = 0;
-        for (IClass cls : snapshot.getClasses())
-        {
-            for (int o : cls.getObjectIds())
-            {
+        for (IClass cls : snapshot.getClasses()) {
+            for (int o : cls.getObjectIds()) {
                 IObject obj = snapshot.getObject(o);
                 int n = obj.getUsedHeapSize();
                 int n2 = snapshot.getHeapSize(o);
-                if (n != n2)
-                {
-                    assertEquals("snapshot object heap size / object heap size "+obj, n, n2);
+                if (n != n2) {
+                    assertEquals("snapshot object heap size / object heap size " + obj, n, n2);
                 }
                 total += n;
             }
@@ -133,5 +107,4 @@ public class GeneralSnapshotTests
         long n = snapshot.getSnapshotInfo().getUsedHeapSize();
         assertEquals("Total heap size", n, total);
     }
-
 }

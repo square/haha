@@ -265,6 +265,38 @@ public class Pass1Parser extends AbstractParser
                 case Constants.DumpSegment.PRIMITIVE_ARRAY_DUMP:
                     readPrimitiveArrayDump(segmentStartPos);
                     break;
+
+                /* these were added for Android in 1.0.3 */
+                case Constants.DumpSegment.ANDROID_HEAP_DUMP_INFO:
+                    // no 1.0.2 equivalent for this
+                    in.skipBytes(idSize + 4);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_INTERNED_STRING:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_FINALIZING:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_DEBUGGER:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_REFERENCE_CLEANUP:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_VM_INTERNAL:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_JNI_MONITOR:
+                    /* keep the ident, drop the next 8 bytes */
+                    readGC(GCRootInfo.Type.UNKNOWN, 8);
+                    break;
+                case Constants.DumpSegment.ANDROID_UNREACHABLE:
+                    readGC(GCRootInfo.Type.UNKNOWN, 0);
+                    break;
+                case Constants.DumpSegment.ANDROID_PRIMITIVE_ARRAY_NODATA_DUMP:
+                    readPrimitiveArrayNoDataDump(segmentStartPos);
+                    break;
+
                 default:
                     throw new SnapshotException(MessageUtil.format(Messages.Pass1Parser_Error_InvalidHeapDumpFile,
                                     segmentType, segmentStartPos));
@@ -457,6 +489,30 @@ public class Pass1Parser extends AbstractParser
         in.skipBytes(elementSize * size);
     }
 
+    /* Added for Android in 1.0.3 */
+    private void readPrimitiveArrayNoDataDump(long segmentStartPos)
+            throws SnapshotException, IOException {
+
+        long address = readID();
+        handler.reportInstance(address, segmentStartPos);
+
+        in.skipBytes(4);
+        int size = in.readInt();
+        byte elementType = in.readByte();
+
+        if ((elementType < IPrimitiveArray.Type.BOOLEAN)
+                || (elementType > IPrimitiveArray.Type.LONG)) {
+            throw new SnapshotException(Messages.Pass1Parser_Error_IllegalType);
+        }
+
+        // check if class needs to be created
+        String name = IPrimitiveArray.TYPE[elementType];
+        IClass clazz = handler.lookupClassByName(name, true);
+        if (clazz == null) {
+            handler.reportRequiredPrimitiveArray(elementType);
+        }
+    }
+
     private String getStringConstant(long address)
     {
         if (address == 0L)
@@ -530,22 +586,24 @@ public class Pass1Parser extends AbstractParser
 
     private class StackFrame
     {
-        long frameId;
-        String method;
-        String methodSignature;
-        String sourceFile;
-        long classSerNum;
+        final long frameId;
+        final String method;
+        final String methodSignature;
+        final String sourceFile;
+        final long classSerNum;
 
         /*
-         * > 0 line number 0 no line info -1 unknown location -2 compiled method
+         * > 0 line number 
+         * 0 no line info
+         * -1 unknown location
+         * -2 compiled method
          * -3 native method
          */
-        int lineNr;
+        final int lineNr;
 
-        public StackFrame(long frameId, int lineNr, String method, String methodSignature, String sourceFile,
-                        long classSerNum)
+        public StackFrame(long frameId, int lineNr, String method,
+                String methodSignature, String sourceFile, long classSerNum)
         {
-            super();
             this.frameId = frameId;
             this.lineNr = lineNr;
             this.method = method;
@@ -593,14 +651,13 @@ public class Pass1Parser extends AbstractParser
 
     private class StackTrace
     {
-        private long threadSerialNr;
-        private long[] frameIds;
+        final long threadSerialNr;
+        final long[] frameIds;
 
         public StackTrace(long serialNr, long threadSerialNr, long[] frameIds)
         {
-            super();
-            this.frameIds = frameIds;
             this.threadSerialNr = threadSerialNr;
+            this.frameIds = frameIds;
         }
 
         @Override
@@ -612,8 +669,7 @@ public class Pass1Parser extends AbstractParser
                 StackFrame frame = id2frame.get(frameId);
                 if (frame != null)
                 {
-                    b.append(frame.toString());
-                    b.append("\r\n"); //$NON-NLS-1$
+                    b.append(frame).append("\r\n"); //$NON-NLS-1$
                 }
 
             }
@@ -622,22 +678,19 @@ public class Pass1Parser extends AbstractParser
 
     }
 
-    private class JavaLocal
-    {
-        private long objectId;
-        private int lineNumber;
-        private int type;
+    private static class JavaLocal {
 
-        public JavaLocal(long objectId, int lineNumber, int type)
-        {
-            super();
-            this.lineNumber = lineNumber;
+        final long objectId;
+        final int lineNumber;
+        final int type;
+
+        public JavaLocal(long objectId, int lineNumber, int type) {
             this.objectId = objectId;
+            this.lineNumber = lineNumber;
             this.type = type;
         }
 
-        public int getType()
-        {
+        public int getType() {
             return type;
         }
     }

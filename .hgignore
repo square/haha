@@ -1,4 +1,5 @@
-bin
-build
-dist
-target
+\.orig$
+\.orig\..*$
+\.chg\..*$
+\.rej$
+\.conflict\~$

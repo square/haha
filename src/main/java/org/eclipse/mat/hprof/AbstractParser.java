@@ -20,8 +20,13 @@ import org.eclipse.mat.snapshot.model.IPrimitiveArray;
 import org.eclipse.mat.snapshot.model.ObjectReference;
 import org.eclipse.mat.util.MessageUtil;
 
-// Hprof binary format as defined here:
-// https://heap-snapshot.dev.java.net/files/documents/4282/31543/hprof-binary-format.html
+/*
+ * Hprof binary format as defined here:
+ * http://hg.openjdk.java.net/jdk7/jdk7/jdk/raw-file/tip/src/share/demo/jvmti/hprof/manual.html
+ * 
+ * Android extensions defined here:
+ * http://android.git.kernel.org/?p=platform/dalvik.git;a=blob;f=tools/hprof-conv/HprofConv.c
+ */
 
 /* package */abstract class AbstractParser
 {
@@ -29,7 +34,8 @@ import org.eclipse.mat.util.MessageUtil;
     {
         JDK12BETA3("JAVA PROFILE 1.0"), //$NON-NLS-1$
         JDK12BETA4("JAVA PROFILE 1.0.1"), //$NON-NLS-1$
-        JDK6("JAVA PROFILE 1.0.2");//$NON-NLS-1$
+        JDK6("JAVA PROFILE 1.0.2"), //$NON-NLS-1$
+        ANDROID103("JAVA PROFILE 1.0.3"); //$NON-NLS-1$
 
         private String label;
 
@@ -38,7 +44,7 @@ import org.eclipse.mat.util.MessageUtil;
             this.label = label;
         }
 
-        public static final Version byLabel(String label)
+        public static Version byLabel(String label)
         {
             for (Version v : Version.values())
             {
@@ -89,6 +95,17 @@ import org.eclipse.mat.util.MessageUtil;
             int INSTANCE_DUMP = 0x21;
             int OBJECT_ARRAY_DUMP = 0x22;
             int PRIMITIVE_ARRAY_DUMP = 0x23;
+
+            /* Android 1.0.3 tags */
+            int ANDROID_HEAP_DUMP_INFO = 0xfe;
+            int ANDROID_ROOT_INTERNED_STRING = 0x89;
+            int ANDROID_ROOT_FINALIZING = 0x8a;
+            int ANDROID_ROOT_DEBUGGER = 0x8b;
+            int ANDROID_ROOT_REFERENCE_CLEANUP = 0x8c;
+            int ANDROID_ROOT_VM_INTERNAL = 0x8d;
+            int ANDROID_ROOT_JNI_MONITOR = 0x8e;
+            int ANDROID_UNREACHABLE = 0x90; /* deprecated */
+            int ANDROID_PRIMITIVE_ARRAY_NODATA_DUMP = 0xc3;
         }
     }
 

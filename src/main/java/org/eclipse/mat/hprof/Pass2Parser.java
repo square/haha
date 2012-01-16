@@ -38,7 +38,6 @@ import org.eclipse.mat.util.SimpleMonitor;
 /**
  * Parser used to read the hprof formatted heap dump
  */
-
 public class Pass2Parser extends AbstractParser
 {
     private IHprofParserHandler handler;
@@ -162,8 +161,28 @@ public class Pass2Parser extends AbstractParser
                     readObjectArrayDump(segmentStartPos);
                     break;
                 case Constants.DumpSegment.PRIMITIVE_ARRAY_DUMP:
-                    readPrimitveArrayDump(segmentStartPos);
+                    readPrimitiveArrayDump(segmentStartPos);
                     break;
+
+                /* these were added for Android in 1.0.3 */
+                case Constants.DumpSegment.ANDROID_HEAP_DUMP_INFO:
+                    in.skipBytes(idSize + 4);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_INTERNED_STRING:
+                case Constants.DumpSegment.ANDROID_ROOT_FINALIZING:
+                case Constants.DumpSegment.ANDROID_ROOT_DEBUGGER:
+                case Constants.DumpSegment.ANDROID_ROOT_REFERENCE_CLEANUP:
+                case Constants.DumpSegment.ANDROID_ROOT_VM_INTERNAL:
+                case Constants.DumpSegment.ANDROID_UNREACHABLE:
+                    in.skipBytes(idSize);
+                    break;
+                case Constants.DumpSegment.ANDROID_ROOT_JNI_MONITOR:
+                    in.skipBytes(idSize + 8);
+                    break;
+                case Constants.DumpSegment.ANDROID_PRIMITIVE_ARRAY_NODATA_DUMP:
+                    readPrimitiveArrayNoDataDump(segmentStartPos);
+                    break;
+
                 default:
                     throw new SnapshotException(MessageUtil.format(Messages.Pass1Parser_Error_InvalidHeapDumpFile,
                                     segmentType, segmentStartPos));
@@ -194,13 +213,14 @@ public class Pass2Parser extends AbstractParser
         in.skipBytes((idSize + 1) * numInstanceFields);
     }
 
-    static Set<String> ignorableClasses = new HashSet<String>();
+    static final Set<String> ignorableClasses = new HashSet<String>();
     static {
     	ignorableClasses.add(WeakReference.class.getName());
     	ignorableClasses.add(SoftReference.class.getName());
     	ignorableClasses.add(PhantomReference.class.getName());
     	ignorableClasses.add("java.lang.ref.Finalizer");
     }
+
     private void readInstanceDump(long segmentStartPos) throws IOException
     {
         long id = readID();
@@ -278,7 +298,7 @@ public class Pass2Parser extends AbstractParser
         handler.addObject(heapObject, segmentStartPos);
     }
 
-    private void readPrimitveArrayDump(long segmentStartPost) throws SnapshotException, IOException
+    private void readPrimitiveArrayDump(long segmentStartPost) throws SnapshotException, IOException
     {
         long id = readID();
 
@@ -306,4 +326,34 @@ public class Pass2Parser extends AbstractParser
         in.skipBytes(elementSize * size);
     }
 
+    /* Added for Android in 1.0.3 */
+    private void readPrimitiveArrayNoDataDump(long segmentStartPost)
+            throws SnapshotException, IOException {
+
+        long id = readID();
+
+        in.skipBytes(4);
+        int size = in.readInt();
+        byte elementType = in.readByte();
+
+        if ((elementType < IPrimitiveArray.Type.BOOLEAN)
+                || (elementType > IPrimitiveArray.Type.LONG)) {
+            throw new SnapshotException(Messages.Pass1Parser_Error_IllegalType);
+        }
+
+        String name = IPrimitiveArray.TYPE[elementType];
+        ClassImpl clazz = (ClassImpl) handler.lookupClassByName(name, true);
+        if (clazz == null) {
+            throw new RuntimeException(MessageUtil.format(
+                    Messages.Pass2Parser_Error_HandleMustCreateFakeClassForName,
+                    name));
+        }
+
+        HeapObject heapObject = new HeapObject(handler.mapAddressToId(id), id, clazz,
+                PrimitiveArrayImpl.doGetUsedHeapSize(clazz, size, elementType));
+        heapObject.references.add(clazz.getObjectAddress());
+        heapObject.isArray = true;
+
+        handler.addObject(heapObject, segmentStartPost);
+    }
 }

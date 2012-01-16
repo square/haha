@@ -14,8 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import org.eclipse.mat.util.MessageUtil;
+import java.text.MessageFormat;
 
 public class IndexManager
 {
@@ -123,18 +122,16 @@ public class IndexManager
                 catch (InvocationTargetException e)
                 {
                     Throwable cause = e.getCause();
-                    IOException ioe = new IOException(MessageUtil.format("{0}: {1}", cause.getClass().getName(), //$NON-NLS-1$
-                                    cause.getMessage()));
-                    ioe.initCause(cause);
-                    throw ioe;
+                    String msg = MessageFormat.format("{0}: {1}", //$NON-NLS-1$
+                            cause.getClass().getName(),
+                            cause.getMessage());
+                    throw new IOException(msg, cause);
                 }
                 catch (RuntimeException e)
                 {
                     // re-wrap runtime exceptions caught during index processing
                     // into IOExceptions -> trigger reparsing of hprof dump
-                    IOException ioe = new IOException();
-                    ioe.initCause(e);
-                    throw ioe;
+                    throw new IOException(e);
                 }
             }
 

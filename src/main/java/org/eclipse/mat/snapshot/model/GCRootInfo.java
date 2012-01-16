@@ -79,7 +79,8 @@ abstract public class GCRootInfo implements Serializable
         int UNREACHABLE = 2048;
     }
 
-    private final static String[] TYPE_STRING = new String[] { MessageUtil.format(Messages.GCRootInfo_Unkown), //
+    private final static String[] TYPE_STRING = new String[] {
+        MessageUtil.format(Messages.GCRootInfo_Unkown), //
     	MessageUtil.format(Messages.GCRootInfo_SystemClass), //
     	MessageUtil.format(Messages.GCRootInfo_JNILocal), //
     	MessageUtil.format(Messages.GCRootInfo_JNIGlobal), //
