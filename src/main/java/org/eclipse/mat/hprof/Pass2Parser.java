@@ -219,6 +219,7 @@ public class Pass2Parser extends AbstractParser
     	ignorableClasses.add(SoftReference.class.getName());
     	ignorableClasses.add(PhantomReference.class.getName());
     	ignorableClasses.add("java.lang.ref.Finalizer");
+    	ignorableClasses.add("java.lang.ref.FinalizerReference");
     }
 
     private void readInstanceDump(long segmentStartPos) throws IOException

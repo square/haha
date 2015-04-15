@@ -1,0 +1,10 @@
+# IDEA
+.idea
+*.iml
+classes
+
+
+# Maven
+target
+pom.xml.*
+release.properties
