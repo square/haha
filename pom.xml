@@ -11,7 +11,7 @@
 
   <groupId>com.squareup.haha</groupId>
   <artifactId>haha</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.4-SNAPSHOT</version>
 
   <name>Headless Android Heap Analyzer</name>
   <description>Port of Eclipse Memory Analyzer to parse and analyze Android heapdumps</description>
