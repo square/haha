@@ -12,14 +12,7 @@
  */
 package org.eclipse.mat.parser.internal;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,8 +43,6 @@ import org.eclipse.mat.parser.internal.snapshot.ObjectMarker;
 import org.eclipse.mat.parser.internal.snapshot.PathsFromGCRootsTreeBuilder;
 import org.eclipse.mat.parser.internal.snapshot.RetainedSizeCache;
 import org.eclipse.mat.parser.internal.util.IntStack;
-import org.eclipse.mat.parser.internal.util.ParserRegistry;
-import org.eclipse.mat.parser.internal.util.ParserRegistry.Parser;
 import org.eclipse.mat.parser.model.AbstractObjectImpl;
 import org.eclipse.mat.parser.model.ClassImpl;
 import org.eclipse.mat.parser.model.ClassLoaderImpl;
@@ -81,117 +72,17 @@ public final class SnapshotImpl implements ISnapshot {
   // factory methods
   // //////////////////////////////////////////////////////////////
 
-  private static final String VERSION = "MAT_01";//$NON-NLS-1$
-
-  @SuppressWarnings("unchecked")
-  public static SnapshotImpl readFromFile(File file, String prefix, IProgressListener listener)
-      throws SnapshotException, IOException {
-    FileInputStream fis = null;
-
-    listener.beginTask(Messages.SnapshotImpl_ReopeningParsedHeapDumpFile.pattern, 9);
-
-    try {
-      fis = new FileInputStream(prefix + "index");//$NON-NLS-1$
-      listener.worked(1);
-      ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(fis));
-
-      String version = in.readUTF();
-      if (!VERSION.equals(version)) {
-        throw new IOException(
-            MessageUtil.format(Messages.SnapshotImpl_Error_UnknownVersion, version));
-      }
-
-      String objectReaderUniqueIdentifier = in.readUTF();
-      Parser parser = ParserRegistry.lookupParser(objectReaderUniqueIdentifier);
-      if (parser == null) {
-        throw new IOException(
-            Messages.SnapshotImpl_Error_ParserNotFound + objectReaderUniqueIdentifier);
-      }
-      listener.worked(1);
-      IObjectReader heapObjectReader = parser.getObjectReader();
-
-      XSnapshotInfo snapshotInfo = (XSnapshotInfo) in.readObject();
-      snapshotInfo.setProperty("$heapFormat", parser.getId()); //$NON-NLS-1$
-      HashMapIntObject<ClassImpl> classCache = (HashMapIntObject<ClassImpl>) in.readObject();
-
-      if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
-
-      HashMapIntObject<XGCRootInfo[]> roots = (HashMapIntObject<XGCRootInfo[]>) in.readObject();
-      HashMapIntObject<HashMapIntObject<XGCRootInfo[]>> rootsPerThread =
-          (HashMapIntObject<HashMapIntObject<XGCRootInfo[]>>) in.readObject();
-
-      listener.worked(1);
-      if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
-
-      HashMapIntObject<String> loaderLabels = (HashMapIntObject<String>) in.readObject();
-      BitField arrayObjects = (BitField) in.readObject();
-      listener.worked(3);
-
-      snapshotInfo.setPrefix(prefix);
-      snapshotInfo.setPath(file.getAbsolutePath());
-      IndexManager indexManager = new IndexManager();
-      indexManager.init(prefix);
-
-      SnapshotImpl ret =
-          new SnapshotImpl(snapshotInfo, heapObjectReader, classCache, roots, rootsPerThread,
-              loaderLabels, arrayObjects, indexManager);
-      listener.worked(3);
-      return ret;
-    } catch (ClassNotFoundException e) {
-      IOException ioe = new IOException(e.getMessage());
-      ioe.initCause(e);
-      throw ioe;
-    } catch (ClassCastException e) {
-      IOException ioe = new IOException(e.getMessage());
-      ioe.initCause(e);
-      throw ioe;
-    } finally {
-      if (fis != null) fis.close();
-      listener.done();
-    }
-  }
-
   public static SnapshotImpl create(XSnapshotInfo snapshotInfo, //
-      String objectReaderUniqueIdentifier, //
       IObjectReader heapObjectReader, //
       HashMapIntObject<ClassImpl> classCache, //
       HashMapIntObject<XGCRootInfo[]> roots, //
       HashMapIntObject<HashMapIntObject<XGCRootInfo[]>> rootsPerThread, //
       BitField arrayObjects, //
-      IndexManager indexManager, //
-      IProgressListener listener) throws IOException, SnapshotException {
+      IndexManager indexManager) throws IOException, SnapshotException {
     SnapshotImpl answer =
         new SnapshotImpl(snapshotInfo, heapObjectReader, classCache, roots, rootsPerThread, null,
             arrayObjects, indexManager);
-
     answer.calculateLoaderLabels();
-
-    FileOutputStream fos = null;
-    ObjectOutputStream out = null;
-
-    try {
-      fos = new FileOutputStream(snapshotInfo.getPrefix() + "index");//$NON-NLS-1$
-      out = new ObjectOutputStream(new BufferedOutputStream(fos));
-      out.writeUTF(VERSION);
-      out.writeUTF(objectReaderUniqueIdentifier);
-      out.writeObject(answer.snapshotInfo);
-      out.writeObject(answer.classCache);
-
-      if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
-
-      out.writeObject(answer.roots);
-      out.writeObject(answer.rootsPerThread);
-
-      if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
-
-      out.writeObject(answer.loaderLabels);
-      out.writeObject(answer.arrayObjects);
-    } finally {
-      if (out != null) out.close();
-
-      if (fos != null) fos.close();
-    }
-
     return answer;
   }
 
