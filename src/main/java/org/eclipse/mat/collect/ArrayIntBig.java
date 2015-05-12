@@ -41,8 +41,7 @@ public final class ArrayIntBig implements Serializable {
   /**
    * Add int to <code>IntArray</code>.
    *
-   * @param element
-   *            int which should be added
+   * @param element int which should be added
    */
   public final void add(int element) {
     int index = (length++) & 0x3FF;
@@ -55,8 +54,7 @@ public final class ArrayIntBig implements Serializable {
   /**
    * Add int[] to <code>IntArray</code>.
    *
-   * @param elements
-   *            int[] which should be added
+   * @param elements int[] which should be added
    */
   public final void addAll(int[] elements) {
     int free = (length & 0x3FF);
@@ -78,8 +76,7 @@ public final class ArrayIntBig implements Serializable {
   /**
    * Get int at index from <code>IntArray</code>.
    *
-   * @param index
-   *            index of int which should be returned
+   * @param index index of int which should be returned
    * @return int at index
    * @throws IndexOutOfBoundsException
    */

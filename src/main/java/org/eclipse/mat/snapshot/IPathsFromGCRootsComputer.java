@@ -40,9 +40,9 @@ public interface IPathsFromGCRootsComputer {
    * user might find a problem faster among just a few shorter paths).
    *
    * @return int array holding the object ids of the objects forming the path
-   *         from the first element at index 0 (object for which the
-   *         computation was started) to the last element in the int array
-   *         (object identified as GC root)
+   * from the first element at index 0 (object for which the
+   * computation was started) to the last element in the int array
+   * (object identified as GC root)
    * @throws SnapshotException
    */
   public int[] getNextShortestPath() throws SnapshotException;
@@ -52,9 +52,8 @@ public interface IPathsFromGCRootsComputer {
    * paths. Either all so far collected paths could be dropped in here or just
    * the last ones if you want to limit the view.
    *
-   * @param paths
-   *            paths from GC roots previously returned by
-   *            {@link #getNextShortestPath}
+   * @param paths paths from GC roots previously returned by
+   * {@link #getNextShortestPath}
    * @return tree like data structure holding the paths from GC roots
    */
   public PathsFromGCRootsTree getTree(Collection<int[]> paths);

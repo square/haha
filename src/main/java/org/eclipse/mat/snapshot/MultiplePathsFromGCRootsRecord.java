@@ -48,12 +48,9 @@ public class MultiplePathsFromGCRootsRecord {
   /**
    * A constructor to create the record
    *
-   * @param objectId
-   *            - the ID of the object which is common for all the paths
-   * @param level
-   *            - the level (depth) in the paths where this objects appears
-   * @param snapshot
-   *            - an ISnapshot object used for further calculation
+   * @param objectId - the ID of the object which is common for all the paths
+   * @param level - the level (depth) in the paths where this objects appears
+   * @param snapshot - an ISnapshot object used for further calculation
    */
   public MultiplePathsFromGCRootsRecord(int objectId, int level, ISnapshot snapshot) {
     this.level = level;
@@ -70,7 +67,7 @@ public class MultiplePathsFromGCRootsRecord {
    * GC roots to the objects
    *
    * @return MultiplePathsFromGCRootsRecord[] Each record in the result
-   *         represents again paths going through one and the same object
+   * represents again paths going through one and the same object
    */
   public MultiplePathsFromGCRootsRecord[] nextLevel() {
     int new_level = level + 1;
@@ -95,8 +92,6 @@ public class MultiplePathsFromGCRootsRecord {
   /**
    * This method is used only when the record is built. Adds one path to the
    * set of paths
-   *
-   * @param path
    */
   public void addPath(int[] path) {
     paths.add(path);
@@ -106,7 +101,7 @@ public class MultiplePathsFromGCRootsRecord {
    * Get all the paths going through the object (getObjectId())
    *
    * @return List<int[]> each element in the list is an int[] representing a
-   *         path
+   * path
    */
   public List<int[]> getPaths() {
     return paths;

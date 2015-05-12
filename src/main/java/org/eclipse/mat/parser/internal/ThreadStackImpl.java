@@ -16,10 +16,8 @@ import org.eclipse.mat.snapshot.model.IStackFrame;
 import org.eclipse.mat.snapshot.model.IThreadStack;
 
 /**
- *
  * @noextend This class is not intended to be subclassed by clients. May still
- *           be subject of change
- *
+ * be subject of change
  */
 class ThreadStackImpl implements IThreadStack {
   private int threadId;

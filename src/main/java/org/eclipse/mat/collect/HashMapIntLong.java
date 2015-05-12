@@ -25,7 +25,7 @@ public final class HashMapIntLong implements Serializable {
 
   private static NoSuchElementException noSuchElementException = new NoSuchElementException(
       "This is static exception, there is no stack trace available. It is thrown by get() method.");
-      //$NON-NLS-1$
+  //$NON-NLS-1$
 
   private static final long serialVersionUID = 1L;
 

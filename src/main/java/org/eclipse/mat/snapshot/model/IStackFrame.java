@@ -25,7 +25,7 @@ public interface IStackFrame {
    * both Java and JNI local objects
    *
    * @return int[] and array containing the object Ids. If there are no local
-   *         objects to the frame, and empty array will be returned
+   * objects to the frame, and empty array will be returned
    */
   public int[] getLocalObjectsIds();
 

@@ -66,8 +66,6 @@ public class MultiplePathsFromGCRootsClassRecord {
   /**
    * This method is used only when the record is built. Adds one path to the
    * set of paths
-   *
-   * @param path
    */
   public void addPath(int[] path) {
     paths.add(path);
@@ -77,7 +75,7 @@ public class MultiplePathsFromGCRootsClassRecord {
    * Get all the paths going through the object (getObjectId())
    *
    * @return List<int[]> each element in the list is an int[] representing a
-   *         path
+   * path
    */
   public List<int[]> getPaths() {
     return paths;

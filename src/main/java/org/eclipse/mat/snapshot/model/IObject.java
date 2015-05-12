@@ -81,7 +81,7 @@ public interface IObject extends Serializable {
    * Get retained heap size of this object.
    *
    * @return retained heap size of this object (returns 0 if the dominator
-   *         tree wasn't calculated for the corresponding snapshot)
+   * tree wasn't calculated for the corresponding snapshot)
    */
   public long getRetainedHeapSize();
 
@@ -98,7 +98,7 @@ public interface IObject extends Serializable {
    * char[].
    *
    * @return class specific name of the given snapshot object or null if it
-   *         can't be resolved
+   * can't be resolved
    */
   public String getClassSpecificName();
 
@@ -107,7 +107,7 @@ public interface IObject extends Serializable {
    * {@link #getClassSpecificName()}.
    *
    * @return concatenation of {@link #getTechnicalName()} and
-   *         {@link #getClassSpecificName()}
+   * {@link #getClassSpecificName()}
    */
   public String getDisplayName();
 
@@ -116,7 +116,7 @@ public interface IObject extends Serializable {
    * the name of the field over which it was referenced.
    *
    * @return list of snapshot objects referenced from this snapshot object
-   *         with the name of the field over which it was referenced
+   * with the name of the field over which it was referenced
    */
   public List<NamedReference> getOutboundReferences();
 
@@ -131,8 +131,7 @@ public interface IObject extends Serializable {
    * are followed and its fields are evaluated. If any of the object
    * references is null, null is returned.
    *
-   * @param field
-   *            the field name in dot notation
+   * @param field the field name in dot notation
    * @return the value of the field
    */
   public Object resolveValue(String field) throws SnapshotException;
@@ -144,7 +143,7 @@ public interface IObject extends Serializable {
    * object).
    *
    * @return {@link GCRootInfo} if the object is a garbage collection root or
-   *         null otherwise
+   * null otherwise
    */
   public GCRootInfo[] getGCRootInfo() throws SnapshotException;
 

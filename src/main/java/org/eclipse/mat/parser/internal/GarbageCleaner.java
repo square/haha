@@ -209,16 +209,16 @@ import org.eclipse.mat.util.SilentProgressListener;
           MessageUtil.format(Messages.GarbageCleaner_Writing, indexFile.getAbsolutePath()));
       idxManager.setReader(Index.O2CLASS,
           new IndexWriter.IntIndexStreamer().writeTo(indexFile, new NewObjectIntIterator() {
-                @Override int doGetNextInt(int index) {
-                  return map[idx.object2classId.get(nextIndex)];
-                  // return
-                  // map[object2classId.get(nextIndex)];
-                }
+            @Override int doGetNextInt(int index) {
+              return map[idx.object2classId.get(nextIndex)];
+              // return
+              // map[object2classId.get(nextIndex)];
+            }
 
-                @Override int[] getMap() {
-                  return map;
-                }
-              }));
+            @Override int[] getMap() {
+              return map;
+            }
+          }));
 
       object2classId.close();
       object2classId.delete();
@@ -239,20 +239,20 @@ import org.eclipse.mat.util.SilentProgressListener;
       // arrayObjects
       idxManager.setReader(Index.A2SIZE,
           new IndexWriter.IntIndexStreamer().writeTo(indexFile, new NewObjectIntIterator() {
-                IOne2OneIndex a2size = preA2size;
-                int newIndex = 0;
+            IOne2OneIndex a2size = preA2size;
+            int newIndex = 0;
 
-                @Override int doGetNextInt(int index) {
-                  int size = a2size.get(nextIndex);
-                  if (size > 0) arrayObjects.set(newIndex);
-                  newIndex++;
-                  return size;
-                }
+            @Override int doGetNextInt(int index) {
+              int size = a2size.get(nextIndex);
+              if (size > 0) arrayObjects.set(newIndex);
+              newIndex++;
+              return size;
+            }
 
-                @Override int[] getMap() {
-                  return map;
-                }
-              }));
+            @Override int[] getMap() {
+              return map;
+            }
+          }));
 
       preA2size.close();
       preA2size.delete();

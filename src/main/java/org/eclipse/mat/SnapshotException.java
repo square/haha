@@ -28,9 +28,6 @@ public class SnapshotException extends Exception {
 
   /**
    * Create snapshot exception with message and root cause.
-   *
-   * @param message
-   * @param cause
    */
   public SnapshotException(String message, Throwable cause) {
     super(message, cause);
@@ -38,8 +35,6 @@ public class SnapshotException extends Exception {
 
   /**
    * Create snapshot exception with message only.
-   *
-   * @param message
    */
   public SnapshotException(String message) {
     super(message);
@@ -47,8 +42,6 @@ public class SnapshotException extends Exception {
 
   /**
    * Create snapshot exception with root cause only.
-   *
-   * @param cause
    */
   public SnapshotException(Throwable cause) {
     super(cause);

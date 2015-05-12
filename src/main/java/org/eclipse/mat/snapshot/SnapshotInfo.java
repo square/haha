@@ -41,26 +41,17 @@ public class SnapshotInfo implements Serializable {
   /**
    * Construct a snapshot info.
    *
-   * @param path
-   *            path from where the snapshot was acquired
-   * @param jvmInfo
-   *            version of the JVM from which it was acquired
-   * @param identifierSize
-   *            size of the internal identifiers in the heap dump, i.e. 32 or
-   *            64 bit
-   * @param creationDate
-   *            date when the snapshot was acquired/parsed
-   * @param numberOfObjects
-   *            number of Java objects found in the snapshot
-   * @param numberOfGCRoots
-   *            number of GC roots found in the snapshot
-   * @param numberOfClasses
-   *            number of Java Classes found in the snapshot
-   * @param numberOfClassLoaders
-   *            number of ClassLoaders found in the snapshot
-   * @param usedHeapSize
-   *            number of bytes used in the heap (the allocated memory may be
-   *            higher)
+   * @param path path from where the snapshot was acquired
+   * @param jvmInfo version of the JVM from which it was acquired
+   * @param identifierSize size of the internal identifiers in the heap dump, i.e. 32 or
+   * 64 bit
+   * @param creationDate date when the snapshot was acquired/parsed
+   * @param numberOfObjects number of Java objects found in the snapshot
+   * @param numberOfGCRoots number of GC roots found in the snapshot
+   * @param numberOfClasses number of Java Classes found in the snapshot
+   * @param numberOfClassLoaders number of ClassLoaders found in the snapshot
+   * @param usedHeapSize number of bytes used in the heap (the allocated memory may be
+   * higher)
    */
   public SnapshotInfo(String path, String prefix, String jvmInfo, int identifierSize,
       Date creationDate, int numberOfObjects, int numberOfGCRoots, int numberOfClasses,
@@ -131,7 +122,7 @@ public class SnapshotInfo implements Serializable {
    * Get size of the internal identifiers in the heap dump, i.e. 32 or 64 bit.
    *
    * @return size of the internal identifiers in the heap dump, i.e. 32 or 64
-   *         bit
+   * bit
    */
   public int getIdentifierSize() {
     return identifierSize;
@@ -141,7 +132,7 @@ public class SnapshotInfo implements Serializable {
    * Get date when the snapshot was acquired/parsed.
    *
    * @return creation date, or <code>null</code> if the creation date is not
-   *         known
+   * known
    */
   public Date getCreationDate() {
     return creationDate != null ? new Date(creationDate.getTime()) : null;
@@ -187,7 +178,7 @@ public class SnapshotInfo implements Serializable {
    * Get number of bytes used in the heap (the allocated memory may be higher)
    *
    * @return number of bytes used in the heap (the allocated memory may be
-   *         higher)
+   * higher)
    */
   public long getUsedHeapSize() {
     return usedHeapSize;

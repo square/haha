@@ -40,7 +40,7 @@ import org.eclipse.mat.util.SimpleMonitor;
 public class Pass1Parser extends AbstractParser {
   private static final Pattern PATTERN_OBJ_ARRAY = Pattern.compile("^(\\[+)L(.*);$"); //$NON-NLS-1$
   private static final Pattern PATTERN_PRIMITIVE_ARRAY = Pattern.compile("^(\\[+)(.)$");
-      //$NON-NLS-1$
+  //$NON-NLS-1$
 
   private HashMapLongObject<String> class2name = new HashMapLongObject<String>();
   private HashMapLongObject<Long> thread2id = new HashMapLongObject<Long>();

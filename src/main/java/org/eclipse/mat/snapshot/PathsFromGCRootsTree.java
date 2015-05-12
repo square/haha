@@ -52,8 +52,7 @@ public final class PathsFromGCRootsTree {
   /**
    * Get sub tree for a referencing object.
    *
-   * @param objId
-   *            referencing object from which on the sub tree is requested
+   * @param objId referencing object from which on the sub tree is requested
    * @return sub tree for a referencing object
    */
   public PathsFromGCRootsTree getBranch(int objId) {
