@@ -26,8 +26,7 @@ public interface IClassSpecificNameResolver {
   /**
    * Resolve the name for snapshot object.
    *
-   * @param object
-   *            object for which the name should be resolved
+   * @param object object for which the name should be resolved
    * @return name for snapshot object
    * @throws SnapshotException
    */

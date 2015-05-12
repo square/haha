@@ -64,13 +64,11 @@ public interface IProgressListener {
    * Notifies that the main task is beginning. This must only be called once
    * on a given progress monitor instance.
    *
-   * @param name
-   *            the name (or description) of the main task
-   * @param totalWork
-   *            the total number of work units into which the main task is
-   *            been subdivided. If the value is <code>UNKNOWN</code> the
-   *            implementation is free to indicate progress in a way which
-   *            doesn't require the total number of work units in advance.
+   * @param name the name (or description) of the main task
+   * @param totalWork the total number of work units into which the main task is
+   * been subdivided. If the value is <code>UNKNOWN</code> the
+   * implementation is free to indicate progress in a way which
+   * doesn't require the total number of work units in advance.
    */
   public void beginTask(String name, int totalWork);
 
@@ -87,7 +85,7 @@ public interface IProgressListener {
    * requested.
    *
    * @return <code>true</code> if cancellation has been requested, and
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    * @see #setCanceled(boolean)
    */
   public boolean isCanceled();
@@ -95,10 +93,9 @@ public interface IProgressListener {
   /**
    * Sets the cancel state to the given value.
    *
-   * @param value
-   *            <code>true</code> indicates that cancelation has been
-   *            requested (but not necessarily acknowledged);
-   *            <code>false</code> clears this flag
+   * @param value <code>true</code> indicates that cancelation has been
+   * requested (but not necessarily acknowledged);
+   * <code>false</code> clears this flag
    * @see #isCanceled()
    */
   public void setCanceled(boolean value);
@@ -107,8 +104,7 @@ public interface IProgressListener {
    * Notifies that a subtask of the main task is beginning. Subtasks are
    * optional; the main task might not have subtasks.
    *
-   * @param name
-   *            the name (or description) of the subtask
+   * @param name the name (or description) of the subtask
    */
   public void subTask(String name);
 
@@ -117,8 +113,7 @@ public interface IProgressListener {
    * completed. Note that this amount represents an installment, as opposed to
    * a cumulative amount of work done to date.
    *
-   * @param work
-   *            the number of work units just completed
+   * @param work the number of work units just completed
    */
   public void worked(int work);
 
@@ -143,13 +138,10 @@ public interface IProgressListener {
   /**
    * Sends a message to the user.
    *
-   * @param severity
-   *            Severity as defined in {@link Severity}
-   * @param message
-   *            The message localized to the current locale.
-   * @param exception
-   *            The relevant low-level exception, or <code>null</code> if
-   *            none.
+   * @param severity Severity as defined in {@link Severity}
+   * @param message The message localized to the current locale.
+   * @param exception The relevant low-level exception, or <code>null</code> if
+   * none.
    */
   public void sendUserMessage(Severity severity, String message, Throwable exception);
 }

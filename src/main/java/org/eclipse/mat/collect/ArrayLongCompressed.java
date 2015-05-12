@@ -32,8 +32,7 @@ public class ArrayLongCompressed {
    * Create <code>LongArrayCompressed</code> from bytes formerly got from
    * {@link #toByteArray()}.
    *
-   * @param bytes
-   *            bytes formerly got from {@link #toByteArray()}
+   * @param bytes bytes formerly got from {@link #toByteArray()}
    */
   public ArrayLongCompressed(byte[] bytes) {
     // Take data structure
@@ -47,12 +46,9 @@ public class ArrayLongCompressed {
    * stored, the number of leading and trailing clear bits. Everything else is
    * stored in the internal data structure.
    *
-   * @param size
-   *            number of longs to be stored
-   * @param leadingClearBits
-   *            number of leading clear bits
-   * @param trailingClearBits
-   *            number of trailing clear bits
+   * @param size number of longs to be stored
+   * @param leadingClearBits number of leading clear bits
+   * @param trailingClearBits number of trailing clear bits
    */
   public ArrayLongCompressed(int size, int leadingClearBits, int trailingClearBits) {
     // Initialize data structure
@@ -63,8 +59,7 @@ public class ArrayLongCompressed {
    * Create <code>LongArrayCompressed</code> from longs representing the data
    * to be stored in compressed form.
    *
-   * @param longs
-   *            longs representing the data to be stored in compressed form
+   * @param longs longs representing the data to be stored in compressed form
    */
   public ArrayLongCompressed(long[] longs) {
     // Call more general constructor
@@ -75,12 +70,9 @@ public class ArrayLongCompressed {
    * Create <code>LongArrayCompressed</code> from longs representing the data
    * to be stored in compressed form (from offset to offset+length).
    *
-   * @param longs
-   *            longs representing the data to be stored in compressed form
-   * @param offset
-   *            offset from which on to compress the longs
-   * @param length
-   *            number of longs to compress from the given array
+   * @param longs longs representing the data to be stored in compressed form
+   * @param offset offset from which on to compress the longs
+   * @param length number of longs to compress from the given array
    */
   public ArrayLongCompressed(long[] longs, int offset, int length) {
     // Determine leading and trailing clear bits
@@ -119,10 +111,8 @@ public class ArrayLongCompressed {
   /**
    * Set value at the given index.
    *
-   * @param index
-   *            index at which the value should be set
-   * @param value
-   *            value to be set at the given index
+   * @param index index at which the value should be set
+   * @param value value to be set at the given index
    */
   public void set(int index, long value) {
     value >>>= trailingClearBits;
@@ -144,8 +134,7 @@ public class ArrayLongCompressed {
   /**
    * Get value from the given index.
    *
-   * @param index
-   *            index at which the value should be set
+   * @param index index at which the value should be set
    * @return value found at the given index
    */
   public long get(int index) {
@@ -174,7 +163,7 @@ public class ArrayLongCompressed {
    * <code>LongArrayCompressed</code> can be reconstructed.
    *
    * @return bytes representing the internal data structure with which an
-   *         <code>LongArrayCompressed</code> can be reconstructed
+   * <code>LongArrayCompressed</code> can be reconstructed
    */
   public byte[] toByteArray() {
     // Return data structure

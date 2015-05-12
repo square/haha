@@ -95,12 +95,10 @@ public interface ISnapshot {
    * <p>
    * Performance: Fast - in memory.
    *
-   * @param name
-   *            name for the class
-   * @param includeSubClasses
-   *            flag indicating whether or not to include also classes derived
-   *            from matching classes (the name isn't taken into account for
-   *            sub classes anymore)
+   * @param name name for the class
+   * @param includeSubClasses flag indicating whether or not to include also classes derived
+   * from matching classes (the name isn't taken into account for
+   * sub classes anymore)
    * @return collection of matching classes
    * @throws SnapshotException
    */
@@ -115,12 +113,10 @@ public interface ISnapshot {
    * <p>
    * Performance: Fast - in memory, but needs iteration over all classes.
    *
-   * @param namePattern
-   *            name pattern for the class (regular expression)
-   * @param includeSubClasses
-   *            flag indicating whether or not to include also classes derived
-   *            from matching classes (the name isn't taken into account for
-   *            sub classes anymore)
+   * @param namePattern name pattern for the class (regular expression)
+   * @param includeSubClasses flag indicating whether or not to include also classes derived
+   * from matching classes (the name isn't taken into account for
+   * sub classes anymore)
    * @return collection of matching classes
    * @throws SnapshotException
    */
@@ -169,8 +165,7 @@ public interface ISnapshot {
    * <p>
    * Performance: Relatively fast - single index operation.
    *
-   * @param objectId
-   *            object which is referenced
+   * @param objectId object which is referenced
    * @return objects referencing the given object
    * @throws SnapshotException
    */
@@ -181,8 +176,7 @@ public interface ISnapshot {
    * <p>
    * Performance: Relatively fast - single index operation.
    *
-   * @param objectId
-   *            object which is referencing
+   * @param objectId object which is referencing
    * @return objects referenced by the given object
    * @throws SnapshotException
    */
@@ -198,11 +192,9 @@ public interface ISnapshot {
    * Performance: Fast to slow - on index; depending on the number of objects
    * and the references.
    *
-   * @param objectIds
-   *            objects which are referenced
-   * @param progressListener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects which are referenced
+   * @param progressListener progress listener informing about the current state of
+   * execution
    * @return objects referencing the given objects
    * @throws SnapshotException
    */
@@ -219,11 +211,9 @@ public interface ISnapshot {
    * Performance: Fast to slow - on index; depending on the number of objects
    * and the references.
    *
-   * @param objectIds
-   *            objects which are referencing
-   * @param progressListener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects which are referencing
+   * @param progressListener progress listener informing about the current state of
+   * execution
    * @return objects referenced by the given objects
    * @throws SnapshotException
    */
@@ -243,15 +233,13 @@ public interface ISnapshot {
    * Performance: Fast to slow - on index; depending on the number and length
    * of GC root paths.
    *
-   * @param objectId
-   *            object for which the GC root paths should be determined
-   * @param excludeMap
-   *            a map specifying paths through which objects have to be
-   *            avoided and not reported. Each entry in the map has the IClass
-   *            as a key, and a Set<String> set, specifying which fields
-   *            exactly from this key class have to be avoided. If for a key
-   *            IClass the value (Set<String>) null is specified, then paths
-   *            through any of the fields will be avoided
+   * @param objectId object for which the GC root paths should be determined
+   * @param excludeMap a map specifying paths through which objects have to be
+   * avoided and not reported. Each entry in the map has the IClass
+   * as a key, and a Set<String> set, specifying which fields
+   * exactly from this key class have to be avoided. If for a key
+   * IClass the value (Set<String>) null is specified, then paths
+   * through any of the fields will be avoided
    * @return interactive computer for paths from GC roots to the given object
    * @throws SnapshotException
    */
@@ -263,18 +251,16 @@ public interface ISnapshot {
    * calculate the shortest path from the GC roots to each of objects in the
    * specified object set.
    *
-   * @param objectIds
-   *            the IDs of the objects for which a shortest path has to be
-   *            calculated
-   * @param excludeMap
-   *            a map specifying paths through which objects have to be
-   *            avoided and not reported. Each entry in the map has the IClass
-   *            as a key, and a Set<String> set, specifying which fields
-   *            exactly from this key class have to be avoided. If for a key
-   *            IClass the value (Set<String>) null is specified, then paths
-   *            through any of the fields will be avoided
+   * @param objectIds the IDs of the objects for which a shortest path has to be
+   * calculated
+   * @param excludeMap a map specifying paths through which objects have to be
+   * avoided and not reported. Each entry in the map has the IClass
+   * as a key, and a Set<String> set, specifying which fields
+   * exactly from this key class have to be avoided. If for a key
+   * IClass the value (Set<String>) null is specified, then paths
+   * through any of the fields will be avoided
    * @return IMultiplePathsFromGCRootsComputer The object which can be used to
-   *         carry out the actual computation and
+   * carry out the actual computation and
    * @throws SnapshotException
    */
   public IMultiplePathsFromGCRootsComputer getMultiplePathsFromGCRoots(int[] objectIds,
@@ -292,11 +278,9 @@ public interface ISnapshot {
    * Performance: Usually extremely slow - on index; depending on the number
    * of objects and the references (deep).
    *
-   * @param objectIds
-   *            objects on which the retained set should be determined
-   * @param progressListener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects on which the retained set should be determined
+   * @param progressListener progress listener informing about the current state of
+   * execution
    * @return retained set of objects for the given objects
    * @throws SnapshotException
    */
@@ -315,12 +299,9 @@ public interface ISnapshot {
    * Performance: Usually extremely slow - on index; depending on the number
    * of objects and the references (deep).
    *
-   * @param objectIds
-   *            objects on which the retained set should be determined
-   * @param fieldNames
-   * @param progressMonitor
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects on which the retained set should be determined
+   * @param progressMonitor progress listener informing about the current state of
+   * execution
    * @return retained set of objects for the given objects
    * @throws SnapshotException
    */
@@ -349,11 +330,9 @@ public interface ISnapshot {
    * Performance: Usually fast - for smaller sets this method is much faster
    * than getRetainedSet
    *
-   * @param objectIds
-   *            objects on which the minimum retained set should be determined
-   * @param progressListener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects on which the minimum retained set should be determined
+   * @param progressListener progress listener informing about the current state of
+   * execution
    * @return the minimum retained set of objects for the given objects
    * @throws SnapshotException
    */
@@ -365,11 +344,9 @@ public interface ISnapshot {
    * faster than getting the min. retained set by getMinRetainedSet() and
    * calculating the size of the min. retained set.
    *
-   * @param objectIds
-   *            objects on which the minimum retained set should be determined
-   * @param listener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds objects on which the minimum retained set should be determined
+   * @param listener progress listener informing about the current state of
+   * execution
    * @return the minimum retained set of objects for the given objects
    * @throws SnapshotException
    */
@@ -382,9 +359,8 @@ public interface ISnapshot {
    * directly dependent objects), i.e. the objects which would get collected
    * as garbage if the given object would be gone from the heap.
    *
-   * @param objectId
-   *            object for which the directly dominated objects should be
-   *            returned
+   * @param objectId object for which the directly dominated objects should be
+   * returned
    * @return objects the given object directly dominates
    * @throws SnapshotException
    */
@@ -397,11 +373,10 @@ public interface ISnapshot {
    * the given object to be collected as garbage if it would be gone from the
    * heap.
    *
-   * @param objectId
-   *            object for which the directly dominated objects should be
-   *            returned
+   * @param objectId object for which the directly dominated objects should be
+   * returned
    * @return Object id of the dominator. -1 if the object is dominated by the
-   *         root of the dominator tree.
+   * root of the dominator tree.
    * @throws SnapshotException
    */
   public int getImmediateDominatorId(int objectId) throws SnapshotException;
@@ -416,17 +391,14 @@ public interface ISnapshot {
    * be taken and checked, and so on ... until a dominator not matching the
    * pattern is found or the dominator tree root is reached.
    *
-   * @param objectIds
-   *            the objects for which we want the dominator summary (e.g. all
-   *            objects of a given class)
-   * @param excludePattern
-   *            An exclude pattern. Domminators whose class name matches the
-   *            pattern will be omitted and their dominator will be taken
-   * @param progressListener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds the objects for which we want the dominator summary (e.g. all
+   * objects of a given class)
+   * @param excludePattern An exclude pattern. Domminators whose class name matches the
+   * pattern will be omitted and their dominator will be taken
+   * @param progressListener progress listener informing about the current state of
+   * execution
    * @return DominatorsSummary the returned DominatorSummary contains the
-   *         summary of the dominators grouped by classes or class loaders
+   * summary of the dominators grouped by classes or class loaders
    * @throws SnapshotException
    */
   public DominatorsSummary getDominatorsOf(int[] objectIds, Pattern excludePattern,
@@ -440,14 +412,12 @@ public interface ISnapshot {
    * independent on one another. It is then correct to sum the retained sizes
    * of the returned objects.
    *
-   * @param objectIds
-   *            the objects for which the top-ancestors in the Dominator tree
-   *            have to be found
-   * @param listener
-   *            progress listener informing about the current state of
-   *            execution
+   * @param objectIds the objects for which the top-ancestors in the Dominator tree
+   * have to be found
+   * @param listener progress listener informing about the current state of
+   * execution
    * @return int[] the objects which not in a parent/child relation in the
-   *         dominator tree
+   * dominator tree
    * @throws SnapshotException
    */
   public int[] getTopAncestorsInDominatorTree(int[] objectIds, IProgressListener listener)
@@ -459,10 +429,9 @@ public interface ISnapshot {
    * <p>
    * Performance: Relatively fast - single index operation.
    *
-   * @param objectId
-   *            id of object you want a convenient object abstraction for
+   * @param objectId id of object you want a convenient object abstraction for
    * @return object abstracting the real Java Object from the heap dump
-   *         identified by the given id
+   * identified by the given id
    * @throws SnapshotException
    */
   public IObject getObject(int objectId) throws SnapshotException;
@@ -476,8 +445,7 @@ public interface ISnapshot {
    * <p>
    * Performance: Fast - in memory.
    *
-   * @param objectId
-   *            id of object you want the GC root info for
+   * @param objectId id of object you want the GC root info for
    * @return null if this object is no GC root or GCRootInfo[] if it is
    * @throws SnapshotException
    */
@@ -489,10 +457,9 @@ public interface ISnapshot {
    * <p>
    * Performance: Relatively fast - single index operation.
    *
-   * @param objectId
-   *            id of object you want the convenient class abstraction for
+   * @param objectId id of object you want the convenient class abstraction for
    * @return object abstracting the real Java Class this object was an
-   *         instance of in the heap dump identified by the given id
+   * instance of in the heap dump identified by the given id
    * @throws SnapshotException
    */
   public IClass getClassOf(int objectId) throws SnapshotException;
@@ -503,8 +470,7 @@ public interface ISnapshot {
    * Performance: Usually fast - in memory for non-array objects and single
    * index operation for array objects.
    *
-   * @param objectId
-   *            id of object for which you want the heap size for
+   * @param objectId id of object for which you want the heap size for
    * @return heap size for the given object
    * @throws SnapshotException
    */
@@ -517,8 +483,7 @@ public interface ISnapshot {
    * size of a set of objects is much faster than iterating over the ids and
    * calling getHeapSize for each single object
    *
-   * @param objectIds
-   *            ids of the objects for which you want the heap size for
+   * @param objectIds ids of the objects for which you want the heap size for
    * @return total heap size for the given object set
    * @throws SnapshotException
    */
@@ -534,10 +499,9 @@ public interface ISnapshot {
    * <p>
    * Performance: Relatively fast - single index operation.
    *
-   * @param objectId
-   *            id of object for which you want the retained heap size for
+   * @param objectId id of object for which you want the retained heap size for
    * @return retained heap size for the given object or 0 if no dominator tree
-   *         was calculated
+   * was calculated
    * @throws SnapshotException
    */
   public long getRetainedHeapSize(int objectId) throws SnapshotException;
@@ -576,8 +540,7 @@ public interface ISnapshot {
    * <p>
    * Performance: Fast - in memory.
    *
-   * @param objectId
-   *            id of object you want the address for
+   * @param objectId id of object you want the address for
    * @return object address
    * @throws SnapshotException
    */
@@ -589,8 +552,7 @@ public interface ISnapshot {
    * <p>
    * Performance: Fast - binary search in memory.
    *
-   * @param objectAddress
-   *            address of object you want the id for
+   * @param objectAddress address of object you want the id for
    * @return object id
    * @throws SnapshotException
    */
@@ -611,7 +573,7 @@ public interface ISnapshot {
    * <p>
    *
    * @return SnapshotAddons - extended information, e.g. perm info, OoM stack
-   *         trace info, JVM arguments, etc.
+   * trace info, JVM arguments, etc.
    * @throws SnapshotException
    */
   public <A> A getSnapshotAddons(Class<A> addon) throws SnapshotException;
@@ -622,8 +584,8 @@ public interface ISnapshot {
    * <p>
    *
    * @return IThreadStack - an object representing the call stack of the
-   *         thread. Returns null if no info is available for the object, or
-   *         no stack info is available at all
+   * thread. Returns null if no info is available for the object, or
+   * no stack info is available at all
    * @throws SnapshotException
    * @since 0.8
    */

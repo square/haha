@@ -28,10 +28,9 @@ public interface IMultiplePathsFromGCRootsComputer {
    * This record can be used to get the objects at the next level in the path,
    * etc...
    *
-   * @param progressListener
-   *            - used to track the progress of the computation
+   * @param progressListener - used to track the progress of the computation
    * @return MultiplePathsFromGCRootsRecord[] one record for each group of
-   *         paths starting from the same GC root
+   * paths starting from the same GC root
    * @throws SnapshotException
    */
   public MultiplePathsFromGCRootsRecord[] getPathsByGCRoot(IProgressListener progressListener)
@@ -43,10 +42,9 @@ public interface IMultiplePathsFromGCRootsComputer {
    * element in the int[] is the specified object, and the last is the GC root
    * object
    *
-   * @param progressListener
-   *            - used to track the progress of the computation
+   * @param progressListener - used to track the progress of the computation
    * @return Object[] - each element in the array is an int[] representing a
-   *         path
+   * path
    * @throws SnapshotException
    */
   public Object[] getAllPaths(IProgressListener progressListener) throws SnapshotException;

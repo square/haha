@@ -74,7 +74,7 @@ public final class DominatorsSummary {
    * Get the dominators summary grouped by class loaders
    *
    * @return ClassloaderDominatorRecord[] the array of
-   *         ClassloaderDominatorRecords
+   * ClassloaderDominatorRecords
    */
   public ClassloaderDominatorRecord[] getClassloaderDominatorRecords() {
     return getClassloaderDominatorRecords(ClassloaderDominatorRecord.class);
@@ -232,8 +232,6 @@ public final class DominatorsSummary {
 
     /**
      * Set the name of the class of this record
-     *
-     * @param className
      */
     public void setClassName(String className) {
       this.className = className;
@@ -314,8 +312,6 @@ public final class DominatorsSummary {
 
     /**
      * set the id of the classloader of the dominators
-     *
-     * @param classloaderId
      */
     public void setClassloaderId(int classloaderId) {
       this.classloaderId = classloaderId;
@@ -323,8 +319,6 @@ public final class DominatorsSummary {
 
     /**
      * Add a dominated object to the record
-     *
-     * @param objectId
      */
     public boolean addDominated(int objectId) {
       return this.dominated.add(objectId);

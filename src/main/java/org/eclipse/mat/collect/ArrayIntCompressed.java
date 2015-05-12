@@ -32,8 +32,7 @@ public class ArrayIntCompressed {
    * Create <code>IntArrayCompressed</code> from bytes formerly got from
    * {@link #toByteArray()}.
    *
-   * @param bytes
-   *            bytes formerly got from {@link #toByteArray()}
+   * @param bytes bytes formerly got from {@link #toByteArray()}
    */
   public ArrayIntCompressed(byte[] bytes) {
     // Take data structure
@@ -47,12 +46,9 @@ public class ArrayIntCompressed {
    * the number of leading and trailing clear bits. Everything else is stored
    * in the internal data structure.
    *
-   * @param size
-   *            number of ints to be stored
-   * @param leadingClearBits
-   *            number of leading clear bits
-   * @param trailingClearBits
-   *            number of trailing clear bits
+   * @param size number of ints to be stored
+   * @param leadingClearBits number of leading clear bits
+   * @param trailingClearBits number of trailing clear bits
    */
   public ArrayIntCompressed(int size, int leadingClearBits, int trailingClearBits) {
     // Initialize data structure
@@ -63,8 +59,7 @@ public class ArrayIntCompressed {
    * Create <code>IntArrayCompressed</code> from ints representing the data to
    * be stored in compressed form.
    *
-   * @param ints
-   *            ints representing the data to be stored in compressed form
+   * @param ints ints representing the data to be stored in compressed form
    */
   public ArrayIntCompressed(int[] ints) {
     // Call more general constructor
@@ -75,12 +70,9 @@ public class ArrayIntCompressed {
    * Create <code>IntArrayCompressed</code> from ints representing the data to
    * be stored in compressed form (from offset to offset+length).
    *
-   * @param ints
-   *            ints representing the data to be stored in compressed form
-   * @param offset
-   *            offset from which on to compress the ints
-   * @param length
-   *            number of ints to compress from the given array
+   * @param ints ints representing the data to be stored in compressed form
+   * @param offset offset from which on to compress the ints
+   * @param length number of ints to compress from the given array
    */
   public ArrayIntCompressed(int[] ints, int offset, int length) {
     // Determine leading and trailing clear bits
@@ -119,10 +111,8 @@ public class ArrayIntCompressed {
   /**
    * Set value at the given index.
    *
-   * @param index
-   *            index at which the value should be set
-   * @param value
-   *            value to be set at the given index
+   * @param index index at which the value should be set
+   * @param value value to be set at the given index
    */
   public void set(int index, int value) {
     value >>>= trailingClearBits;
@@ -144,8 +134,7 @@ public class ArrayIntCompressed {
   /**
    * Get value from the given index.
    *
-   * @param index
-   *            index at which the value should be set
+   * @param index index at which the value should be set
    * @return value found at the given index
    */
   public int get(int index) {
@@ -174,7 +163,7 @@ public class ArrayIntCompressed {
    * <code>IntArrayCompressed</code> can be reconstructed.
    *
    * @return bytes representing the internal data structure with which an
-   *         <code>IntArrayCompressed</code> can be reconstructed
+   * <code>IntArrayCompressed</code> can be reconstructed
    */
   public byte[] toByteArray() {
     // Return data structure

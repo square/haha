@@ -25,8 +25,8 @@ public interface IThreadStack {
    * stack
    *
    * @return {@link IStackFrame}[] an array containing all stack frames. The
-   *         first element of the array contains the top of the stack, and the
-   *         last element the bottom of the stack
+   * first element of the array contains the top of the stack, and the
+   * last element the bottom of the stack
    */
   public IStackFrame[] getStackFrames();
 

@@ -58,14 +58,14 @@ public final class ClassSpecificNameResolverRegistry {
       } catch (RuntimeException e) {
         Logger.getLogger(ClassSpecificNameResolverRegistry.class.getName())
             .log(Level.SEVERE, MessageUtil.format(
-                    Messages.ClassSpecificNameResolverRegistry_ErrorMsg_DuringResolving,
-                    object.getTechnicalName()), e);
+                Messages.ClassSpecificNameResolverRegistry_ErrorMsg_DuringResolving,
+                object.getTechnicalName()), e);
         return null;
       } catch (SnapshotException e) {
         Logger.getLogger(ClassSpecificNameResolverRegistry.class.getName())
             .log(Level.SEVERE, MessageUtil.format(
-                    Messages.ClassSpecificNameResolverRegistry_ErrorMsg_DuringResolving,
-                    object.getTechnicalName()), e);
+                Messages.ClassSpecificNameResolverRegistry_ErrorMsg_DuringResolving,
+                object.getTechnicalName()), e);
         return null;
       }
     }
@@ -143,8 +143,7 @@ public final class ClassSpecificNameResolverRegistry {
    * Resolve name of the given snapshot object or return null if it can't be
    * resolved.
    *
-   * @param object
-   *            snapshot object for which the name should be resolved
+   * @param object snapshot object for which the name should be resolved
    * @return name of the given snapshot object or null if it can't be resolved
    */
   public static String resolve(IObject object) {
