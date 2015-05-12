@@ -89,7 +89,7 @@ public class HprofRandomAccessParser extends AbstractParser {
     // check if we need to defer reading the class
     List<IClass> hierarchy = resolveClassHierarchy(dump, dump.getClassOf(objectId));
     if (hierarchy == null) {
-      throw new IOException(Messages.HprofRandomAccessParser_Error_DumpIncomplete);
+      throw new IOException(Messages.HprofRandomAccessParser_Error_DumpIncomplete.pattern);
     } else {
       List<Field> instanceFields = new ArrayList<Field>();
       for (IClass clazz : hierarchy) {
@@ -123,7 +123,7 @@ public class HprofRandomAccessParser extends AbstractParser {
 
     IClass arrayType = (IClass) dump.getObject(dump.mapAddressToId(arrayClassObjectID));
     if (arrayType == null) {
-      throw new RuntimeException(Messages.HprofRandomAccessParser_Error_MissingFakeClass);
+      throw new RuntimeException(Messages.HprofRandomAccessParser_Error_MissingFakeClass.pattern);
     }
 
     Object content = null;
@@ -150,7 +150,7 @@ public class HprofRandomAccessParser extends AbstractParser {
 
     long elementType = in.readByte();
     if ((elementType < IPrimitiveArray.Type.BOOLEAN) || (elementType > IPrimitiveArray.Type.LONG)) {
-      throw new IOException(Messages.Pass1Parser_Error_IllegalType);
+      throw new IOException(Messages.Pass1Parser_Error_IllegalType.pattern);
     }
 
     int elementSize = IPrimitiveArray.ELEMENT_SIZE[(int) elementType];

@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.collect.BitField;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.index.IIndexReader;
-import org.eclipse.mat.parser.internal.Messages;
 import org.eclipse.mat.parser.internal.util.IntStack;
 import org.eclipse.mat.snapshot.ExcludedReferencesDescriptor;
 import org.eclipse.mat.snapshot.ISnapshot;
@@ -190,7 +190,8 @@ public class ObjectMarker {
       }
     }
 
-    progressListener.beginTask(Messages.ObjectMarker_CalculateRetainedSize, rootsStack.size());
+    progressListener.beginTask(Messages.ObjectMarker_CalculateRetainedSize,
+        rootsStack.size());
 
     // create and start as much marker threads as specified
     DfsThread[] dfsthreads = new DfsThread[numberOfThreads];

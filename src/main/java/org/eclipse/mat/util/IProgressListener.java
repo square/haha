@@ -12,6 +12,8 @@
  */
 package org.eclipse.mat.util;
 
+import org.eclipse.mat.hprof.Messages;
+
 /**
  * This interface is closely modeled after
  * {@link org.eclipse.core.runtime.IProgressMonitor}. The latter has not been
@@ -70,7 +72,9 @@ public interface IProgressListener {
    * implementation is free to indicate progress in a way which
    * doesn't require the total number of work units in advance.
    */
-  public void beginTask(String name, int totalWork);
+  void beginTask(String name, int totalWork);
+
+  void beginTask(Messages name, int totalWork);
 
   /**
    * Notifies that the work is done; that is, either the main task is

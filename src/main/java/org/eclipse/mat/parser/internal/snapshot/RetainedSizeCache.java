@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.mat.collect.HashMapIntLong;
-import org.eclipse.mat.parser.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.model.XSnapshotInfo;
 
 public class RetainedSizeCache {
@@ -68,7 +68,7 @@ public class RetainedSizeCache {
       isDirty = false;
     } catch (IOException e) {
       Logger.getLogger(RetainedSizeCache.class.getName())
-          .log(Level.WARNING, Messages.RetainedSizeCache_Warning_IgnoreError, e);
+          .log(Level.WARNING, Messages.RetainedSizeCache_Warning_IgnoreError.pattern, e);
     }
   }
 
@@ -89,7 +89,7 @@ public class RetainedSizeCache {
       }
     } catch (IOException e) {
       Logger.getLogger(RetainedSizeCache.class.getName())
-          .log(Level.WARNING, Messages.RetainedSizeCache_ErrorReadingRetainedSizes, e);
+          .log(Level.WARNING, Messages.RetainedSizeCache_ErrorReadingRetainedSizes.pattern, e);
 
       // might have read corrupt data
       id2size.clear();

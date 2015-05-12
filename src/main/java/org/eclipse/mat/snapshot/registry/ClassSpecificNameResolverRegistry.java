@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.mat.SnapshotException;
-import org.eclipse.mat.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.snapshot.extension.IClassSpecificNameResolver;
 import org.eclipse.mat.snapshot.extension.Subject;
 import org.eclipse.mat.snapshot.extension.Subjects;
@@ -149,7 +149,7 @@ public final class ClassSpecificNameResolverRegistry {
   public static String resolve(IObject object) {
     if (object == null) {
       throw new NullPointerException(
-          Messages.ClassSpecificNameResolverRegistry_Error_MissingObject);
+          Messages.ClassSpecificNameResolverRegistry_Error_MissingObject.pattern);
     }
 
     return instance().registry.doResolve(object);

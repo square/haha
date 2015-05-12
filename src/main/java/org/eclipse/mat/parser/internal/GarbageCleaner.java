@@ -22,6 +22,7 @@ import java.util.Map;
 import org.eclipse.mat.collect.BitField;
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.collect.IteratorInt;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.index.IIndexReader.IOne2LongIndex;
 import org.eclipse.mat.parser.index.IIndexReader.IOne2ManyIndex;
 import org.eclipse.mat.parser.index.IIndexReader.IOne2OneIndex;
@@ -44,7 +45,7 @@ import org.eclipse.mat.util.SilentProgressListener;
 
     try {
       listener.beginTask(Messages.GarbageCleaner_RemovingUnreachableObjects, 11);
-      listener.subTask(Messages.GarbageCleaner_SearchingForUnreachableObjects);
+      listener.subTask(Messages.GarbageCleaner_SearchingForUnreachableObjects.pattern);
 
       final int oldNoOfObjects = idx.identifiers.size();
 
@@ -107,7 +108,7 @@ import org.eclipse.mat.util.SilentProgressListener;
 
       if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
       listener.worked(1); // 3
-      listener.subTask(Messages.GarbageCleaner_ReIndexingObjects);
+      listener.subTask(Messages.GarbageCleaner_ReIndexingObjects.pattern);
 
       // create re-index map
       final int[] map = new int[oldNoOfObjects];
@@ -163,7 +164,7 @@ import org.eclipse.mat.util.SilentProgressListener;
 
       if (listener.isCanceled()) throw new IProgressListener.OperationCanceledException();
       listener.worked(1); // 4
-      listener.subTask(Messages.GarbageCleaner_ReIndexingClasses);
+      listener.subTask(Messages.GarbageCleaner_ReIndexingClasses.pattern);
 
       // fix classes
       HashMapIntObject<ClassImpl> classesByNewId =
@@ -264,7 +265,7 @@ import org.eclipse.mat.util.SilentProgressListener;
       // inbound, outbound
       // //////////////////////////////////////////////////////////////
 
-      listener.subTask(Messages.GarbageCleaner_ReIndexingOutboundIndex);
+      listener.subTask(Messages.GarbageCleaner_ReIndexingOutboundIndex.pattern);
 
       IndexWriter.IntArray1NSortedWriter w_out =
           new IndexWriter.IntArray1NSortedWriter(newNoOfObjects,

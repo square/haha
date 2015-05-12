@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.eclipse.mat.SnapshotException;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.IIndexBuilder;
 import org.eclipse.mat.parser.internal.util.ParserRegistry;
 import org.eclipse.mat.parser.internal.util.ParserRegistry.Parser;
@@ -79,7 +80,8 @@ public class SnapshotFactory {
                   file.getPath(), new Date(file.lastModified()), indexFile.getPath(),
                   new Date(indexFile.lastModified()));
           listener.sendUserMessage(Severity.INFO, message, null);
-          listener.subTask(Messages.SnapshotFactoryImpl_ReparsingHeapDumpWithOutOfDateIndex);
+          listener.subTask(
+              Messages.SnapshotFactoryImpl_ReparsingHeapDumpWithOutOfDateIndex.pattern);
         }
       }
     } catch (IOException ignore_and_reparse) {

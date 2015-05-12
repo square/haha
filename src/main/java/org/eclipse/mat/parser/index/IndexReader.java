@@ -21,7 +21,7 @@ import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.collect.ArrayIntCompressed;
 import org.eclipse.mat.collect.ArrayLongCompressed;
 import org.eclipse.mat.collect.HashMapIntObject;
-import org.eclipse.mat.parser.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.io.SimpleBufferedRandomAccessInputStream;
 
 public abstract class IndexReader {
@@ -76,7 +76,9 @@ public abstract class IndexReader {
       try {
         if (in != null) return;
 
-        if (indexFile == null) throw new IOException(Messages.IndexReader_Error_IndexIsEmbedded);
+        if (indexFile == null) {
+          throw new IOException(Messages.IndexReader_Error_IndexIsEmbedded.pattern);
+        }
 
         in = new SimpleBufferedRandomAccessInputStream(
             new RandomAccessFile(this.indexFile, "r"));//$NON-NLS-1$
@@ -336,7 +338,9 @@ public abstract class IndexReader {
     private synchronized void open() throws IOException {
       if (in != null) return;
 
-      if (indexFile == null) throw new IOException(Messages.IndexReader_Error_IndexIsEmbedded);
+      if (indexFile == null) {
+        throw new IOException(Messages.IndexReader_Error_IndexIsEmbedded.pattern);
+      }
 
       in = new SimpleBufferedRandomAccessInputStream(
           new RandomAccessFile(this.indexFile, "r"));//$NON-NLS-1$

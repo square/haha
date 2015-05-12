@@ -19,6 +19,7 @@ import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.collect.ArrayUtils;
 import org.eclipse.mat.collect.BitField;
 import org.eclipse.mat.collect.IteratorInt;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.index.IIndexReader;
 import org.eclipse.mat.parser.index.IndexManager;
 import org.eclipse.mat.parser.index.IndexManager.Index;
@@ -61,9 +62,10 @@ public class DominatorTree {
       inboundIndex = snapshot.getIndexManager().inbound();
       outboundIndex = snapshot.getIndexManager().outbound();
       this.monitor =
-          new SimpleMonitor(Messages.DominatorTree_CalculatingDominatorTree, listener, new int[] {
-              300, 300, 200, 200, 200
-          });
+          new SimpleMonitor(Messages.DominatorTree_CalculatingDominatorTree.pattern, listener,
+              new int[] {
+                  300, 300, 200, 200, 200
+              });
       gcRootsArray = snapshot.getGCRoots();
       gcRootsSet = new BitField(snapshot.getSnapshotInfo().getNumberOfObjects());
       for (int id : gcRootsArray) {
@@ -104,7 +106,7 @@ public class DominatorTree {
       snapshot.getIndexManager().outbound().unload();
 
       IProgressListener progressListener = this.monitor.nextMonitor();
-      progressListener.beginTask(Messages.DominatorTree_ComputingDominators, n / 1000);
+      progressListener.beginTask(Messages.DominatorTree_ComputingDominators.pattern, n / 1000);
 
       for (int i = n; i >= 2; i--) {
         int w = vertex[i];
