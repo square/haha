@@ -25,7 +25,6 @@ import org.eclipse.mat.parser.model.ClassImpl;
 import org.eclipse.mat.parser.model.XGCRootInfo;
 import org.eclipse.mat.parser.model.XSnapshotInfo;
 import org.eclipse.mat.snapshot.model.IClass;
-import org.eclipse.mat.util.IProgressListener;
 
 public class SnapshotImplBuilder {
   private XSnapshotInfo snapshotInfo;
@@ -78,10 +77,9 @@ public class SnapshotImplBuilder {
     this.arrayObjects = arrayObjects;
   }
 
-  public SnapshotImpl create(Parser parser, IProgressListener listener)
-      throws IOException, SnapshotException {
+  public SnapshotImpl create(Parser parser) throws IOException, SnapshotException {
     IObjectReader heapObjectReader = parser.getObjectReader();
-    return SnapshotImpl.create(snapshotInfo, parser.getUniqueIdentifier(), heapObjectReader,
-        classCache, roots, rootsPerThread, arrayObjects, indexManager, listener);
+    return SnapshotImpl.create(snapshotInfo, heapObjectReader, classCache, roots, rootsPerThread,
+        arrayObjects, indexManager);
   }
 }

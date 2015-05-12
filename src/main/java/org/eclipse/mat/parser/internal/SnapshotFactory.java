@@ -17,7 +17,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +31,6 @@ import org.eclipse.mat.parser.model.XSnapshotInfo;
 import org.eclipse.mat.snapshot.ISnapshot;
 import org.eclipse.mat.snapshot.model.GCRootInfo;
 import org.eclipse.mat.util.IProgressListener;
-import org.eclipse.mat.util.IProgressListener.Severity;
 import org.eclipse.mat.util.MessageUtil;
 
 public class SnapshotFactory {
@@ -68,35 +66,8 @@ public class SnapshotFactory {
     int p = name.lastIndexOf('.');
     String prefix = p >= 0 ? name.substring(0, p + 1) : name + ".";//$NON-NLS-1$
 
-    try {
-      File indexFile = new File(prefix + "index");//$NON-NLS-1$
-      if (indexFile.exists()) {
-        // check if hprof file is newer than index file
-        if (file.lastModified() < indexFile.lastModified()) {
-          answer = SnapshotImpl.readFromFile(file, prefix, listener);
-        } else {
-          String message =
-              MessageUtil.format(Messages.SnapshotFactoryImpl_ReparsingHeapDumpAsIndexOutOfDate,
-                  file.getPath(), new Date(file.lastModified()), indexFile.getPath(),
-                  new Date(indexFile.lastModified()));
-          listener.sendUserMessage(Severity.INFO, message, null);
-          listener.subTask(
-              Messages.SnapshotFactoryImpl_ReparsingHeapDumpWithOutOfDateIndex.pattern);
-        }
-      }
-    } catch (IOException ignore_and_reparse) {
-      String text = ignore_and_reparse.getMessage() != null ? ignore_and_reparse.getMessage()
-          : ignore_and_reparse.getClass().getName();
-      String message =
-          MessageUtil.format(Messages.SnapshotFactoryImpl_Error_ReparsingHeapDump, text);
-      listener.sendUserMessage(Severity.WARNING, message, ignore_and_reparse);
-      listener.subTask(message);
-    }
-
-    if (answer == null) {
-      deleteIndexFiles(file);
-      answer = parse(file, prefix, args, listener);
-    }
+    deleteIndexFiles(file);
+    answer = parse(file, prefix, args, listener);
 
     entry = new SnapshotEntry(1, answer);
 
@@ -146,7 +117,7 @@ public class SnapshotFactory {
   // Internal implementations
   // //////////////////////////////////////////////////////////////
 
-  private final ISnapshot parse(File file, String prefix, Map<String, String> args,
+  private ISnapshot parse(File file, String prefix, Map<String, String> args,
       IProgressListener listener) throws SnapshotException {
     List<ParserRegistry.Parser> parsers = ParserRegistry.matchParser(file.getName());
     if (parsers.isEmpty()) parsers.addAll(ParserRegistry.allParsers()); // try all...
@@ -180,7 +151,7 @@ public class SnapshotFactory {
 
         indexBuilder.clean(purgedMapping, listener);
 
-        SnapshotImpl snapshot = builder.create(parser, listener);
+        SnapshotImpl snapshot = builder.create(parser);
 
         snapshot.calculateDominatorTree(listener);
 
