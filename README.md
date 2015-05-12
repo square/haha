@@ -39,7 +39,7 @@ Collection<IClass> refClasses = snapshot.getClassesByName("com.example.SomeClass
 
 ```
 dependencies {
-  compile 'com.squareup.haha:haha:1.1'
+  compile 'com.squareup.haha:haha:1.2'
 }
 ```
 
