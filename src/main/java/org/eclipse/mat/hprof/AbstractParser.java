@@ -122,7 +122,7 @@ import org.eclipse.mat.util.MessageUtil;
         if (answer == null) {
           if (bytesRead <= 13) // did not read "JAVA PROFILE "
           {
-            throw new IOException(Messages.AbstractParser_Error_NotHeapDump);
+            throw new IOException(Messages.AbstractParser_Error_NotHeapDump.pattern);
           } else {
             throw new IOException(
                 MessageUtil.format(Messages.AbstractParser_Error_UnknownHPROFVersion,
@@ -140,7 +140,7 @@ import org.eclipse.mat.util.MessageUtil;
       }
     }
 
-    throw new IOException(Messages.AbstractParser_Error_InvalidHPROFHeader);
+    throw new IOException(Messages.AbstractParser_Error_InvalidHPROFHeader.pattern);
   }
 
   protected long readUnsignedInt() throws IOException {
