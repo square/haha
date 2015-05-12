@@ -11,7 +11,7 @@
 
   <groupId>com.squareup.haha</groupId>
   <artifactId>haha</artifactId>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
 
   <name>Headless Android Heap Analyzer</name>
   <description>Port of Eclipse Memory Analyzer to parse and analyze Android heapdumps</description>
@@ -22,7 +22,7 @@
     <url>https://github.com/square/haha</url>
     <connection>scm:git:https://github.com/square/haha.git</connection>
     <developerConnection>scm:git:git@github.com:square/haha.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>haha-1.3</tag>
   </scm>
 
   <organization>
