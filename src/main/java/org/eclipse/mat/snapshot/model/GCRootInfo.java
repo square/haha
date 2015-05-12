@@ -13,7 +13,7 @@
 package org.eclipse.mat.snapshot.model;
 
 import java.io.Serializable;
-import org.eclipse.mat.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.util.MessageUtil;
 
 /**

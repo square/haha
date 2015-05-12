@@ -39,6 +39,7 @@ import org.eclipse.mat.collect.BitField;
 import org.eclipse.mat.collect.HashMapIntObject;
 import org.eclipse.mat.collect.IteratorInt;
 import org.eclipse.mat.collect.SetInt;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.IObjectReader;
 import org.eclipse.mat.parser.index.IIndexReader;
 import org.eclipse.mat.parser.index.IIndexReader.IOne2OneIndex;
@@ -87,7 +88,7 @@ public final class SnapshotImpl implements ISnapshot {
       throws SnapshotException, IOException {
     FileInputStream fis = null;
 
-    listener.beginTask(Messages.SnapshotImpl_ReopeningParsedHeapDumpFile, 9);
+    listener.beginTask(Messages.SnapshotImpl_ReopeningParsedHeapDumpFile.pattern, 9);
 
     try {
       fis = new FileInputStream(prefix + "index");//$NON-NLS-1$
@@ -1357,11 +1358,12 @@ public final class SnapshotImpl implements ISnapshot {
   }
 
   public void setClassLoaderLabel(int objectId, String label) {
-    if (label == null) throw new NullPointerException(Messages.SnapshotImpl_Label);
+    if (label == null) throw new NullPointerException(Messages.SnapshotImpl_Label.pattern);
 
     String old = loaderLabels.put(objectId, label);
     if (old == null) {
-      throw new RuntimeException(Messages.SnapshotImpl_Error_ReplacingNonExistentClassLoader);
+      throw new RuntimeException(
+          Messages.SnapshotImpl_Error_ReplacingNonExistentClassLoader.pattern);
     }
   }
 
@@ -1622,7 +1624,7 @@ public final class SnapshotImpl implements ISnapshot {
         }
 
         default:
-          throw new RuntimeException(Messages.SnapshotImpl_Error_UnrecognizedState + state);
+          throw new RuntimeException(Messages.SnapshotImpl_Error_UnrecognizedState.pattern + state);
       }
     }
 

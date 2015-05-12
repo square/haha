@@ -12,6 +12,8 @@
  */
 package org.eclipse.mat.util;
 
+import org.eclipse.mat.hprof.Messages;
+
 public class SimpleMonitor {
   String task;
   IProgressListener delegate;
@@ -47,6 +49,10 @@ public class SimpleMonitor {
 
     public Listener(int majorUnits) {
       this.majorUnits = majorUnits;
+    }
+
+    public final void beginTask(Messages name, int totalWork) {
+      beginTask(name.pattern, totalWork);
     }
 
     public void beginTask(String name, int totalWork) {

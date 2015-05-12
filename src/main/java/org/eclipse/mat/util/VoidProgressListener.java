@@ -12,6 +12,8 @@
  */
 package org.eclipse.mat.util;
 
+import org.eclipse.mat.hprof.Messages;
+
 /**
  * Empty implementation of {@link IProgressListener} which is frequently used
  * throughout the snapshot API in ISnapshot to get feedback for long running
@@ -28,6 +30,10 @@ public class VoidProgressListener implements IProgressListener {
    * @see IProgressListener#beginTask(String, int)
    */
   public void beginTask(String name, int totalWork) {
+  }
+
+  public final void beginTask(Messages name, int totalWork) {
+    beginTask(name.pattern, totalWork);
   }
 
   /**

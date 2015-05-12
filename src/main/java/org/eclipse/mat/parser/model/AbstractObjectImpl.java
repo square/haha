@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import org.eclipse.mat.SnapshotException;
 import org.eclipse.mat.collect.ArrayLong;
-import org.eclipse.mat.parser.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 import org.eclipse.mat.parser.internal.SnapshotImpl;
 import org.eclipse.mat.snapshot.ISnapshot;
 import org.eclipse.mat.snapshot.model.Field;

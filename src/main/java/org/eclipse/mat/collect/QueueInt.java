@@ -13,7 +13,7 @@
 
 package org.eclipse.mat.collect;
 
-import org.eclipse.mat.parser.internal.Messages;
+import org.eclipse.mat.hprof.Messages;
 
 /**
  * @since 0.8
@@ -32,7 +32,9 @@ public class QueueInt {
 
   public final int get() {
 
-    if (size == 0) throw new ArrayIndexOutOfBoundsException(Messages.QueueInt_ZeroSizeQueue);
+    if (size == 0) {
+      throw new ArrayIndexOutOfBoundsException(Messages.QueueInt_ZeroSizeQueue.pattern);
+    }
     int result = data[headIdx];
     headIdx++;
     size--;

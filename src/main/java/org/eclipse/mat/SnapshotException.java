@@ -12,6 +12,9 @@
  */
 package org.eclipse.mat;
 
+import org.eclipse.mat.hprof.Messages;
+import org.eclipse.mat.util.MessageUtil;
+
 /**
  * Exception used to indicate a problem different from the standard Java
  * exceptions while performing an operation on an snapshot.
@@ -45,6 +48,10 @@ public class SnapshotException extends Exception {
    */
   public SnapshotException(Throwable cause) {
     super(cause);
+  }
+
+  public SnapshotException(Messages messages) {
+    super(MessageUtil.format(messages));
   }
 
   /**

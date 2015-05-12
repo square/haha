@@ -12,6 +12,8 @@
  */
 package org.eclipse.mat.util;
 
+import org.eclipse.mat.hprof.Messages;
+
 /**
  * @since 0.8
  */
@@ -23,6 +25,10 @@ public class SilentProgressListener implements IProgressListener {
   }
 
   public void beginTask(String name, int totalWork) {
+  }
+
+  public final void beginTask(Messages name, int totalWork) {
+    beginTask(name.pattern, totalWork);
   }
 
   public void done() {
