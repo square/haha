@@ -32,14 +32,8 @@ ClassObj someClass = snapshot.findClass("com.example.SomeClass");
 ## Gradle config
 
 ```
-repositories {
-  mavenCentral()
-  maven {
-    url 'https://oss.sonatype.org/content/repositories/snapshots/'
-  }
-}
 dependencies {
-  compile 'com.squareup.haha:haha:2.0-SNAPSHOT'
+  compile 'com.squareup.haha:haha:2.0'
 }
 ```
 
