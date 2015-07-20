@@ -8,3 +8,4 @@ classes
 target
 pom.xml.*
 release.properties
+dependency-reduced-pom.xml
