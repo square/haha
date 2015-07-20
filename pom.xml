@@ -16,7 +16,7 @@
   <version>2.0-SNAPSHOT</version>
 
   <name>Headless Android Heap Analyzer</name>
-  <description>Port of Eclipse Memory Analyzer to parse and analyze Android heapdumps</description>
+  <description>Java library to automate the analysis of Android heap dumps.</description>
   <url>https://github.com/square/haha</url>
   <inceptionYear>2015</inceptionYear>
 
@@ -39,8 +39,8 @@
 
   <licenses>
     <license>
-      <name>Eclipse Public License - v 1.0</name>
-      <url>http://www.eclipse.org/org/documents/epl-v10.php</url>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -72,7 +72,6 @@
       <artifactId>guava</artifactId>
       <version>17.0</version>
     </dependency>
-
   </dependencies>
 
   <build>

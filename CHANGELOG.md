@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 2.0-SNAPSHOT
+
+Switched hprof parsing from AndrodMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
+
+As a result, althought similar in spirit, all the APIs have changed.
+
 ## Version 1.3 *(2015-05-12)*
 
 No caching of the result of parsing the heap dump. This could lead to stack overflow errors, and we don't need it anyway since our use case is to always open a heap dump, parse it, compute a result and throw away the index files.
