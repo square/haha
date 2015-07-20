@@ -1,0 +1,12 @@
+Trove: High Performance Collections for Java
+http://http://trove.starlight-systems.com/
+
+Imported trove4j "1.1 (with patches from JetBrains)" that Android Studio uses:
+
+$ mvn org.apache.maven.plugins:maven-install-plugin:2.5.1:install-file \
+  -Dfile=tools/idea/lib/trove4j.jar \
+  -Dsources=tools/idea/lib/src/trove4j_src.jar \
+  -DgroupId=net.sf.trove4j \
+  -DartifactId=trove4j -Dversion=1.1 -Dpackaging=jar -DgeneratePom=true \
+  -DlocalRepositoryPath=prebuilts/tools/common/m2/repository \
+  -DcreateChecksum=true

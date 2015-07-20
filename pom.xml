@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -11,10 +13,10 @@
 
   <groupId>com.squareup.haha</groupId>
   <artifactId>haha</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>2.0-SNAPSHOT</version>
 
   <name>Headless Android Heap Analyzer</name>
-  <description>Port of Eclipse Memory Analyzer to parse and analyze Android heapdumps</description>
+  <description>Java library to automate the analysis of Android heap dumps.</description>
   <url>https://github.com/square/haha</url>
   <inceptionYear>2015</inceptionYear>
 
@@ -30,15 +32,15 @@
     <url>http://squareup.com</url>
   </organization>
 
- <issueManagement>
+  <issueManagement>
     <system>GitHub Issues</system>
     <url>http://github.com/square/haha/issues</url>
   </issueManagement>
 
   <licenses>
     <license>
-      <name>Eclipse Public License - v 1.0</name>
-      <url>http://www.eclipse.org/org/documents/epl-v10.php</url>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -64,6 +66,14 @@
     </snapshotRepository>
   </distributionManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>17.0</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -79,12 +89,12 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5</version>
-	    <configuration>
-	      <autoVersionSubmodules>true</autoVersionSubmodules>
-	      <useReleaseProfile>false</useReleaseProfile>
-	      <releaseProfiles>release</releaseProfiles>
-	      <goals>deploy</goals>
-	    </configuration>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>deploy</goals>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
@@ -95,6 +105,65 @@
           <serverId>ossrh</serverId>
           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
           <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <minimizeJar>true</minimizeJar>
+          <relocations>
+            <relocation>
+              <pattern>com.google.common</pattern>
+              <shadedPattern>com.squareup.haha.guava</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>gnu.trove</pattern>
+              <shadedPattern>com.squareup.haha.trove</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.android.annotations</pattern>
+              <shadedPattern>com.squareup.haha.annotations</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.android.tools.perflib.heap</pattern>
+              <shadedPattern>com.squareup.haha.perflib</shadedPattern>
+            </relocation>
+          </relocations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.wvengen</groupId>
+        <artifactId>proguard-maven-plugin</artifactId>
+        <version>2.0.10</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>proguard</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <obfuscate>false</obfuscate>
+          <options>
+            <option>-allowaccessmodification</option>
+            <option>-keep class com.squareup.haha.perflib.** { *; }</option>
+            <option>-dontwarn javax.annotation.**</option>
+            <option>-optimizations !code/allocation/variable</option>
+          </options>
+          <libs>
+            <lib>${java.home}/lib/rt.jar</lib>
+          </libs>
         </configuration>
       </plugin>
     </plugins>

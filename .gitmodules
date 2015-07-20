@@ -1,0 +1,6 @@
+[submodule "android_platform_tool_base"]
+	path = android_platform_tool_base
+	url = https://android.googlesource.com/platform/tools/base
+[submodule "android_platform_prebuilts_tools"]
+	path = android_platform_prebuilts_tools
+	url = https://android.googlesource.com/platform/prebuilts/tools/
