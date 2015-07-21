@@ -1,10 +1,10 @@
 # Change Log
 
-## Version 2.0-SNAPSHOT
+## Version 2.0 *(2015-07-20)*
 
 Switched hprof parsing from AndrodMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
 
-As a result, althought similar in spirit, all the APIs have changed.
+Althought they are similar in spirit, all the APIs have changed.
 
 ## Version 1.3 *(2015-05-12)*
 
