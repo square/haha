@@ -2,7 +2,7 @@
 
 ## Version 2.0.2 *(2015-07-20)*
 
-Switched hprof parsing from AndrodMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
+Switched hprof parsing from AndroMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
 
 Althought they are similar in spirit, all the APIs have changed.
 
