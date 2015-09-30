@@ -13,14 +13,14 @@ This project is essentially a repackaging of the work of others to make it avail
 
 To learn how to dump the heap, read the [Android documentation](https://developer.android.com/tools/debugging/debugging-memory.html#HeapDump). Here's an example:
 
-```
+``` java
 File heapDumpFile = ...
 Debug.dumpHprofData(heapDumpFile.getAbsolutePath());
 ```
 
 After dumping the heap, use HAHA to parse and analyze it.
 
-```
+``` java
 HprofBuffer buffer = new MemoryMappedFileBuffer(heapDumpFile);
 HprofParser parser = new HprofParser(buffer);
 Snapshot snapshot = parser.parse();
@@ -31,7 +31,7 @@ ClassObj someClass = snapshot.findClass("com.example.SomeClass");
 
 ## Gradle config
 
-```
+``` groovy
 dependencies {
   compile 'com.squareup.haha:haha:2.0'
 }
