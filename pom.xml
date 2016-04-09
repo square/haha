@@ -167,13 +167,34 @@
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard-base</artifactId>
+            <version>5.2.1</version>
+            <scope>runtime</scope>
+          </dependency>
+        </dependencies>
         <configuration>
+          <proguardVersion>5.2.1</proguardVersion>
           <obfuscate>false</obfuscate>
           <options>
             <option>-allowaccessmodification</option>
             <option>-keep class com.squareup.haha.perflib.** { *; }</option>
+            <option>-keep class com.squareup.haha.trove.THashMap { *; }</option>
             <option>-dontwarn javax.annotation.**</option>
             <option>-optimizations !code/allocation/variable</option>
+            <!-- Proguard removes Iterables but includes its inner class, Iterables$2. It then
+                 removes the EnclosingMethod attribute from Iterables$2, presumably because it
+                 references a non-existent class. This causes warnings for HAHA's dependents like:
+
+                     "Ignoring InnerClasses attribute for an anonymous inner class [...] that
+                     doesn't come with an associated EnclosingMethod attribute."
+
+                 Keeping Iterables prevents Proguard from removing the EnclosingMethod attribute.
+                 See https://sourceforge.net/p/proguard/discussion/182456/thread/6920e89e.
+                 -->
+            <option>-keepnames class com.squareup.haha.guava.collect.Iterables</option>
           </options>
           <libs>
             <lib>${java.home}/lib/rt.jar</lib>
