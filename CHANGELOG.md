@@ -4,7 +4,7 @@
 
 Switched hprof parsing from AndroMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
 
-Althought they are similar in spirit, all the APIs have changed.
+Although they are similar in spirit, all the APIs have changed.
 
 ## Version 1.3 *(2015-05-12)*
 
