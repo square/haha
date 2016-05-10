@@ -180,8 +180,8 @@
           <obfuscate>false</obfuscate>
           <options>
             <option>-allowaccessmodification</option>
-            <option>-keep class com.squareup.haha.perflib.** { *; }</option>
-            <option>-keep class com.squareup.haha.trove.THashMap { *; }</option>
+            <option>-keep,includedescriptorclasses class com.squareup.haha.perflib.** { *; }</option>
+            <option>-keep,includedescriptorclasses class com.squareup.haha.trove.THashMap { *; }</option>
             <option>-dontwarn javax.annotation.**</option>
             <option>-optimizations !code/allocation/variable</option>
             <!-- Proguard removes Iterables but includes its inner class, Iterables$2. It then
