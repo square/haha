@@ -33,13 +33,13 @@ ClassObj someClass = snapshot.findClass("com.example.SomeClass");
 
 ``` groovy
 dependencies {
-  compile 'com.squareup.haha:haha:2.0.2'
+  compile 'com.squareup.haha:haha:2.0.3'
 }
 ```
 
 ## Versions
 
-### HAHA 2.0.2
+### HAHA 2.0.*
 
 * This library contains parts of [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib) and is available under the same license, Apache v2.
 * It contains a repackaged version of Guava and Trove4j "1.1 with patches from JetBrains"

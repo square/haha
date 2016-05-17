@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 2.0.3 *(2016-05-17)*
+
+Modify pom to generate better source jars.
+Updated Proguard rules to eliminate various warnings.
+
 ## Version 2.0.2 *(2015-07-20)*
 
 Switched hprof parsing from AndroMat to [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib)
