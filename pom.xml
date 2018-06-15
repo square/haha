@@ -65,12 +65,25 @@
   </distributionManagement>
 
   <dependencies>
+	<dependency>
+	  <groupId>org.jetbrains.trove4j</groupId>
+	  <artifactId>trove4j</artifactId>
+	  <version>20160824</version>
+	</dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>17.0</version>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>bintray</id>
+      <name>bintray</name>
+      <url>http://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
@@ -135,14 +148,15 @@
           <minimizeJar>true</minimizeJar>
           <createSourcesJar>true</createSourcesJar>
           <shadeSourcesContent>true</shadeSourcesContent>
+          <artifactSet>
+            <excludes>
+              <exclude>org.jetbrains.trove4j:trove4j</exclude>
+            </excludes>
+          </artifactSet>
           <relocations>
             <relocation>
               <pattern>com.google.common</pattern>
               <shadedPattern>com.squareup.haha.guava</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>gnu.trove</pattern>
-              <shadedPattern>com.squareup.haha.trove</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.android.annotations</pattern>
@@ -181,7 +195,6 @@
           <options>
             <option>-allowaccessmodification</option>
             <option>-keep,includedescriptorclasses class com.squareup.haha.perflib.** { *; }</option>
-            <option>-keep,includedescriptorclasses class com.squareup.haha.trove.THashMap { *; }</option>
             <option>-dontwarn javax.annotation.**</option>
             <option>-optimizations !code/allocation/variable</option>
             <!-- Proguard removes Iterables but includes its inner class, Iterables$2. It then
