@@ -104,6 +104,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
           <releaseProfiles>release</releaseProfiles>
+          <arguments>-Dmaven.javadoc.skip=true</arguments>
           <goals>deploy</goals>
         </configuration>
       </plugin>
