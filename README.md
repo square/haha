@@ -2,7 +2,6 @@
 
 *“Ha Ha!”* - Nelson
 
-
 ## Introduction
 
 HAHA is a Java library to automate the analysis of Android heap dumps.
@@ -33,13 +32,22 @@ ClassObj someClass = snapshot.findClass("com.example.SomeClass");
 
 ``` groovy
 dependencies {
-  compile 'com.squareup.haha:haha:2.0.3'
+  compile 'com.squareup.haha:haha:2.0.4'
 }
 ```
 
 ## Versions
 
-### HAHA 2.0.*
+### HAHA 2.0.4
+
+This release separates out Trove4j from HAHA since Trove4j is available under LGPL 2.1 and HAHA is available under Apache 2.
+
+* This library contains parts of [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib) and is available under the same license, Apache v2.
+* It contains a repackaged version of Guava 
+* It has an artifact dependency on a [fork of Trove4j](https://github.com/JetBrains/intellij-deps-trove4j) ("1.1 with patches from JetBrains") which is [available in jcenter](https://bintray.com/jetbrains/trove4j/trove4j) under the LGPL 2.1 license.
+* The result is merged in an uber-jar (perflib + guava) proguarded to remove unused code and reduce the footprint.
+
+### HAHA 2.0, 2.0.1, 2.0.2, 2.0.3
 
 * This library contains parts of [perflib](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/perflib) and is available under the same license, Apache v2.
 * It contains a repackaged version of Guava and Trove4j "1.1 with patches from JetBrains"
@@ -54,3 +62,10 @@ dependencies {
 * [AndroMAT](https://bitbucket.org/joebowbeer/andromat/overview) is a fork of *vshor/mat* and changed the heap dump parsing to support Android specific heap dump format.
 * *HAHA* was originally a fork of *AndroMAT*. We recreated the lost Git history, kept the bare minimum needed code and packaged it to be releasable on Maven Central.
 * MAT is available under the Eclipse Public License v1.0 so HAHA was initially released under that same license.
+
+## Releasing
+
+```
+mvn release:prepare && mvn release:perform
+
+```
