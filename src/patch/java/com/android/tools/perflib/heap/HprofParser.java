@@ -454,11 +454,13 @@ class HprofParser {
         long id = readId();
         int threadSerialNumber = mInput.readInt();
         ThreadObj thread = mSnapshot.getThread(threadSerialNumber);
-        StackTrace trace = mSnapshot.getStackTrace(thread.mStackTrace);
-        RootObj root = new RootObj(RootType.NATIVE_STACK, id, threadSerialNumber, trace);
+        // See https://issuetracker.google.com/issues/122713143
+        if (thread != null) {
+            StackTrace trace = mSnapshot.getStackTrace(thread.mStackTrace);
+            RootObj root = new RootObj(RootType.NATIVE_STACK, id, threadSerialNumber, trace);
 
-        mSnapshot.addRoot(root);
-
+            mSnapshot.addRoot(root);
+        }
         return mIdSize + 4;
     }
 
