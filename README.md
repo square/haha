@@ -20,9 +20,8 @@ Debug.dumpHprofData(heapDumpFile.getAbsolutePath());
 After dumping the heap, use HAHA to parse and analyze it.
 
 ``` java
-HprofBuffer buffer = new MemoryMappedFileBuffer(heapDumpFile);
-HprofParser parser = new HprofParser(buffer);
-Snapshot snapshot = parser.parse();
+DataBuffer buffer = new MemoryMappedFileBuffer(heapDumpFile);
+Snapshot snapshot = Snapshot.createSnapshot(buffer);
 
 // The rest is up to you.
 ClassObj someClass = snapshot.findClass("com.example.SomeClass");
@@ -32,11 +31,16 @@ ClassObj someClass = snapshot.findClass("com.example.SomeClass");
 
 ``` groovy
 dependencies {
-  compile 'com.squareup.haha:haha:2.0.4'
+  compile 'com.squareup.haha:haha:2.1'
 }
 ```
 
 ## Versions
+
+### HAHA 2.1
+
+* This release updates perflib to the `bc5c698efaf970f599e877a8b26de16736db4272` SHA of the android_platform_tool_base repo.
+* It also overlays a patched version of `HprofParser.java` to fix https://issuetracker.google.com/issues/122713143.
 
 ### HAHA 2.0.4
 
