@@ -54,7 +54,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.6</java.version>
+    <java.version>1.8</java.version>
   </properties>
 
   <distributionManagement>
@@ -87,6 +87,39 @@
 
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>replace-source-file</id>
+            <phase>process-sources</phase>
+            <configuration>
+              <tasks>
+                <move file="src/main/java/com/android/tools/perflib/heap/HprofParser.java" tofile="src/main/java/com/android/tools/perflib/heap/HprofParser.java.override"/>
+                <copy file="src/patch/java/com/android/tools/perflib/heap/HprofParser.java" todir="src/main/java/com/android/tools/perflib/heap/"/>
+                <move file="./src/main/java/com/android/tools/perflib/heap/memoryanalyzer" tofile="./removed"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>restore-source-file</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <move file="src/main/java/com/android/tools/perflib/heap/HprofParser.java.override" tofile="src/main/java/com/android/tools/perflib/heap/HprofParser.java"/>
+                <move file="./removed" tofile="./src/main/java/com/android/tools/perflib/heap/memoryanalyzer"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
