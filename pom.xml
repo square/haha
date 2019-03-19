@@ -153,6 +153,7 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <useReleaseProfile>false</useReleaseProfile>
           <releaseProfiles>release</releaseProfiles>
+          <localCheckout>true</localCheckout>
           <goals>deploy</goals>
         </configuration>
       </plugin>
