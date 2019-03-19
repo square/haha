@@ -208,7 +208,7 @@ class HprofParser {
             // TODO: enable this after the dominators computation is also optimized.
             // mSnapshot.computeRetainedSizes();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Could not parse heap dump", e);
         }
 
         mClassNamesById.clear();
