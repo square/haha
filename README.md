@@ -1,11 +1,11 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+
 # Headless Android Heap Analyzer
 
 *“Ha Ha!”* - Nelson
 
-
 ## This repository is DEPRECATED
-
-[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 * This project was created to provide a heap dump parser for [LeakCanary](https://github.com/square/leakcanary) by repackaging heap dump parsers from other repositories.
 * LeakCanary now has its own [heap dump parser](https://github.com/square/leakcanary/tree/master/leakcanary-haha).
