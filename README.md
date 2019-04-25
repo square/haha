@@ -2,6 +2,13 @@
 
 *“Ha Ha!”* - Nelson
 
+
+## This repository is DEPRECATED
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+This project was created to provide a heap dump parser for [LeakCanary](https://github.com/square/leakcanary) by repackaging heap dump parsers from other repositories. LeakCanary now has [its own parser](https://github.com/square/leakcanary/tree/master/leakcanary-haha), available on Maven Central as `com.squareup.leakcanary:leakcanary-haha:2.0-alpha-1`.
+
 ## Introduction
 
 HAHA is a Java library to automate the analysis of Android heap dumps.
